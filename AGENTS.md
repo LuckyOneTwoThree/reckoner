@@ -19,10 +19,12 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 /new 填 thesis
    → @user-insight / @competitor-teardown   （产出 A / B·C 类假设）
    → @assumption-xray                        （红队：点名裸奔 + 每条最便宜验证）
-   → 跑最便宜验证
+   → @experiment-design                       （cheapest test → 可追踪实验规格，status→testing）
+   → 跑实验
    → @evidence-intake                        （落回台账：升级 / 反驳）
    → /review                                 （强声明 sign-off）
-   → 若承重假设被反驳 → 修订 thesis（循环）
+   → /decide                                  （go / pivot / kill + 理由，写 decisions.md）
+   → 若承重假设被反驳 / 决定 pivot → @revise-thesis（结构化修订论点，闭合循环）
 ```
 
 **任何 skill 收尾时，“下一步”只能指向回路里的下一个节点，不能跳到方案 / MVP / 原型 / 排期。** 造东西是回路之外的事，前提是承重假设已经过红队 + sign-off。
@@ -34,7 +36,7 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
  - `writeback-contract.md` — 回写规范、分级 sign-off、循环状态机。**动内核前必读。**
  - `templates/thesis.md` — 论点模板。
 - `skills/<name>/SKILL.md` — 原子能力，含 frontmatter（name/description/reads/writes/eval）。触发某能力时**先读对应 SKILL.md 再执行**。
-- `commands/*.md` — 斜杠命令流程（`/new`、`/list`、`/review`）。
+- `commands/*.md` — 斜杠命令流程（`/new`、`/list`、`/review`、`/decide`）。
 - `tools/*.mjs` — 零依赖 node 脚本（`new-project.mjs`、`validate.mjs`）。
 - `workspace/<project>/` — 每个项目一个隔离文件夹（`thesis.md` + `ledger.json` + `sources/`）。
 
@@ -44,11 +46,14 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 |---|---|---|---|
 | 新建项目 | `/new` 或 “建个项目 X” | 跑 `node tools/new-project.mjs <name>`，引导填 `thesis.md` | @user-insight / @competitor-teardown |
 | 列出/切换项目、忘了项目名 | `/list` | 读 `commands/list.md`，列出所有项目+一句话论点，先挑对项目 | 回显当前项目路径后进回路 |
-| 压力测试想法 / 挑战假设 / 备评审 | `@assumption-xray` | 读 SKILL.md，输出红队表，回写台账 | 跑最便宜验证 → @evidence-intake |
+| 压力测试想法 / 挑战假设 / 备评审 | `@assumption-xray` | 读 SKILL.md，输出红队表，回写台账 | @experiment-design → @evidence-intake |
+| 设计验证实验 / 把“该测什么”变“怎么测” | `@experiment-design` | 读 SKILL.md，把裸奔假设的最便宜验证写成实验规格，status→testing | 跑实验 → @evidence-intake |
 | 理解用户 / 访谈综合 | `@user-insight` | 读 SKILL.md，产出洞察，回写 A 类假设 | @assumption-xray |
 | 拆竞品 | `@competitor-teardown` | 读 SKILL.md，回写 B/C 类假设 | @assumption-xray |
 | 录入证据 | `@evidence-intake` | 读 SKILL.md，存 `sources/`，升降级台账 | /review 或 修订 thesis |
-| 每周确认强声明 | `/review` | 读 `commands/review.md`，逐条 sign-off | 回到回路继续 |
+| 每周确认强声明 | `/review` | 读 `commands/review.md`，逐条 sign-off | /decide 定 go/pivot/kill |
+| 记决策 go/pivot/kill | `/decide` | 读 `commands/decide.md`，写 `decisions.md` 决策日志 | go→离开内核 / pivot→@revise-thesis |
+| 论点被证伪要修订 | `@revise-thesis` | 读 SKILL.md，改 thesis + 追加 revisions[]，复位 needsRevision | @assumption-xray 重新红队 |
 
 ## 铁律（每次回写都要守）
 
@@ -72,4 +77,4 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 - 不要把方法论/外部长文照搬进 skill 输出。
 - 不要跳过 validator 直接宣称台账已更新。
 - 不要打稻草人：攻 steelman 或不攻。
-- 不要新增 Phase 1.5+ 的对象（personal 层 / OST / decision-log），除非用户明确要求——见 `docs/ARCHITECTURE.md` 的触发条件。
+- 不要新增 Phase 1.5+ 的对象（personal 层 / OST / PRD·spec 生成），除非用户明确要求——见 `docs/ARCHITECTURE.md` 的触发条件。（注：`/decide` 决策日志已应用户请求落地，写入 `workspace/<项目>/decisions.md`，不入内核 schema。）
