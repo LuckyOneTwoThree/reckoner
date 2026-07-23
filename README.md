@@ -1,4 +1,4 @@
-# PM Superpower · P0
+# Playbook · P0
 
 > 给主观、可刷、易自欺的产品决策，装一个**会顶嘴、有记忆**的决策内核。
 > 照妖镜是钩子，内核是留存，跨项目校准是护城河（Phase 1.5）。
@@ -28,7 +28,7 @@
 ## 目录结构
 
 ```
-pm-superpower/
+playbook/
 ├─ README.md
 ├─ AGENTS.md                    # agent 操作约定（Codex 等约定读）
 ├─ CLAUDE.md                    # 指向 AGENTS.md（Claude Code 约定读）
