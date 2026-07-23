@@ -11,37 +11,54 @@
 
 **LLM 负责判断，脚本负责纪律。** 你（agent）做拆解、攻击、归类、写作；确定性的校验和 ID 分配交给 `tools/*.mjs`，不要靠脑补代替。
 
+## 内核回路（skill 之间怎么接）
+
+skill 虽各自独立（standalone-first），但产出都只是“回路里的一环”，不是终点。默认接力顺序：
+
+```
+/new 填 thesis
+   → @user-insight / @competitor-teardown   （产出 A / B·C 类假设）
+   → @assumption-xray                        （红队：点名裸奔 + 每条最便宜验证）
+   → 跑最便宜验证
+   → @evidence-intake                        （落回台账：升级 / 反驳）
+   → /review                                 （强声明 sign-off）
+   → 若承重假设被反驳 → 修订 thesis（循环）
+```
+
+**任何 skill 收尾时，“下一步”只能指向回路里的下一个节点，不能跳到方案 / MVP / 原型 / 排期。** 造东西是回路之外的事，前提是承重假设已经过红队 + sign-off。
+
 ## 目录地图
 
 - `kernel/` — 数据模型与契约（真 IP）。改内核前先读 `kernel/writeback-contract.md`。
-  - `thesis.schema.json` / `assumption-ledger.schema.json` — 结构，回写必须符合。
-  - `writeback-contract.md` — 回写规范、分级 sign-off、循环状态机。**动内核前必读。**
-  - `templates/thesis.md` — 论点模板。
+ - `thesis.schema.json` / `assumption-ledger.schema.json` — 结构，回写必须符合。
+ - `writeback-contract.md` — 回写规范、分级 sign-off、循环状态机。**动内核前必读。**
+ - `templates/thesis.md` — 论点模板。
 - `skills/<name>/SKILL.md` — 原子能力，含 frontmatter（name/description/reads/writes/eval）。触发某能力时**先读对应 SKILL.md 再执行**。
-- `commands/*.md` — 斜杠命令流程（`/new`、`/review`）。
+- `commands/*.md` — 斜杠命令流程（`/new`、`/list`、`/review`）。
 - `tools/*.mjs` — 零依赖 node 脚本（`new-project.mjs`、`validate.mjs`）。
-- `workspace/<project-id>/` — 每个项目一个隔离文件夹（`thesis.md` + `ledger.json` + `sources/`）。
+- `workspace/<project>/` — 每个项目一个隔离文件夹（`thesis.md` + `ledger.json` + `sources/`）。
 
 ## 能力清单（何时用哪个）
 
-| 用户意图 | 触发 | 你要做的 |
-|---|---|---|
-| 新建项目 | `/new` 或 “建个项目 X” | 跑 `node tools/new-project.mjs <id>`，引导填 `thesis.md` |
-| 压力测试想法 / 挑战假设 / 备评审 | `@assumption-xray` | 读 `skills/assumption-xray/SKILL.md`，输出红队表，回写台账 |
-| 理解用户 / 访谈综合 | `@user-insight` | 读该 SKILL.md，产出洞察，回写相关假设 |
-| 拆竞品 | `@competitor-teardown` | 读该 SKILL.md，产出拆解，回写 B/C 类假设 |
-| 录入证据（访谈/数据/链接） | `@evidence-intake` | 读该 SKILL.md，把证据存入 `sources/`，升级相关假设证据等级 |
-| 每周确认强声明 | `/review` | 读 `commands/review.md`，逐条 sign-off |
+| 用户意图 | 触发 | 你要做的 | 回路下一站 |
+|---|---|---|---|
+| 新建项目 | `/new` 或 “建个项目 X” | 跑 `node tools/new-project.mjs <name>`，引导填 `thesis.md` | @user-insight / @competitor-teardown |
+| 列出/切换项目、忘了项目名 | `/list` | 读 `commands/list.md`，列出所有项目+一句话论点，先挑对项目 | 回显当前项目路径后进回路 |
+| 压力测试想法 / 挑战假设 / 备评审 | `@assumption-xray` | 读 SKILL.md，输出红队表，回写台账 | 跑最便宜验证 → @evidence-intake |
+| 理解用户 / 访谈综合 | `@user-insight` | 读 SKILL.md，产出洞察，回写 A 类假设 | @assumption-xray |
+| 拆竞品 | `@competitor-teardown` | 读 SKILL.md，回写 B/C 类假设 | @assumption-xray |
+| 录入证据 | `@evidence-intake` | 读 SKILL.md，存 `sources/`，升降级台账 | /review 或 修订 thesis |
+| 每周确认强声明 | `/review` | 读 `commands/review.md`，逐条 sign-off | 回到回路继续 |
 
 ## 铁律（每次回写都要守）
 
-1. **写台账前后都跑校验**：任何对 `ledger.json` 的改动，结束时必须 `node tools/validate.mjs workspace/<id>/ledger.json`，通过才算完成。
+1. **写台账前后都跑校验**：任何对 `ledger.json` 的改动，结束时必须 `node tools/validate.mjs workspace/<project>/ledger.json`，通过才算完成。
 2. **ID 交给脚本**：新假设 `id` 留空，由 validator 按 `<TYPE>-NN` 分配；不要自己编号。
 3. **证据等级有上限**：`evidenceLevel` 不得高于来源 `provenance.reliability` 的上限（self≤L1 / indirect≤L2 / direct≤L3 / data≤L4）。
 4. **分级 sign-off**：结构性改动和 ≤L2 自动落库；`≥L3` 或 `status→validated/refuted` 必须走 `/review` 人工确认，不要自作主张标已验证。
 5. **循环状态机**：某承重假设 `status→refuted` 时，给关联 `thesis.needsRevision=true` 并提示修订，别默默改论点。
 6. **裸奔/过期是算出来的**：`isNaked`、`stale` 由 validator 计算，不落盘，不要手写进 JSON。
-7. **多项目隔离**：只动当前 `workspace/<id>/`，ID 项目内编号，别跨项目串写。
+7. **多项目隔离**：动手前先回显 `当前项目: workspace/<project>/` 并确认；只动这个目录，ID 项目内编号，别跨项目串写。**同一会话只做一个项目**——检测到切换项目时，先提示用户开新会话或显式确认再继续（上下文串味是文件隔离堵不住的漏）。
 
 ## 环境差异
 
@@ -50,7 +67,9 @@
 
 ## 不要做
 
-- 不要把 `<database>`/外部长文照搬进 skill 输出。
+- **不要在假设经红队 + sign-off 前推荐进入方案 / MVP / 原型 / 排期。** 这是最常见的行动偏误漏点：模型会把“访谈完/证据支持”误读成“可以开工”。收尾永远指向内核回路的下一步（红队 / 最便宜验证 / review / 修订论点）。
+- **不要把“最便宜验证（cheapestTest）”写成 MVP**——那是最贵的验证之一，方向相反。cheapestTest 是假冒门 / 少量访谈 / 落地页这类最小证伪动作。
+- 不要把方法论/外部长文照搬进 skill 输出。
 - 不要跳过 validator 直接宣称台账已更新。
 - 不要打稻草人：攻 steelman 或不攻。
 - 不要新增 Phase 1.5+ 的对象（personal 层 / OST / decision-log），除非用户明确要求——见 `docs/ARCHITECTURE.md` 的触发条件。

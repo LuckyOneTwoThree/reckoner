@@ -1,9 +1,11 @@
 ---
 name: evidence-intake
 description: "把一份新证据（访谈、数据、竞品截图、链接、实验结果）归档到 sources/，判定它支持还是反驳哪条假设，据实定证据等级与来源可靠度，并升级/降级台账。用于验证回访、把'跑完的测试'落回内核。"
-reads: [assumption-ledger, thesis]
-writes: [assumption-ledger, thesis]
-eval: ./eval.md
+metadata:
+  reads: "assumption-ledger, thesis"
+  writes: "assumption-ledger, thesis"
+  eval: "./eval.md"
+  version: "1.1"
 ---
 
 # 证据采集：让台账随现实更新
@@ -17,17 +19,21 @@ eval: ./eval.md
 - 这是**闭环的回路**：其他 skill 提出假设，evidence-intake 用现实检验它们。
 - 证据可靠度决定等级上限：self≤L1 / indirect≤L2 / direct≤L3 / data≤L4。
 - 证据可以**反驳**假设——那比确认更有价值。
+- **内核回路位置**：本 skill 是回路的**收口**，把跑完的验证落回台账。收口后要么触发论点修订（被反驳），要么指出还剩哪些裸奔假设待测——**而不是宣布“验证通过，可以造了”。**
 
 ## Instructions
+
+> **动手前先回显当前项目**：先声明 `当前项目: workspace/<slug>/`，确认它就是本次要读写的项目。若同一会话此前在操作别的项目，先提示开新会话或让用户确认切换，再继续。本次所有读写（含存入 sources/）只落在这个目录内。
 
 1. 把证据原文/截图/链接存进 `workspace/<项目>/sources/`，给个可引用的文件名。
 2. 判定证据类型与可靠度（self/indirect/direct/data）。
 3. 找出它影响哪条假设（可多条），判断是**支持**还是**反驳**。
 4. 对每条受影响假设：
-   - 支持 → 提升 `evidenceLevel`（不超可靠度上限），必要时 `status→validated`。
-   - 反驳 → `status→refuted`，触发回写契约的循环状态机。
+ - 支持 → 提升 `evidenceLevel`（不超可靠度上限），必要时 `status→validated`。
+ - 反驳 → `status→refuted`，触发回写契约的循环状态机。
 5. 更新 `provenance.source` 指向归档文件，刷新 `freshness.lastVerified`。
 6. `≥L3` 或状态终局改动挂“待 sign-off”，交 `/review`。
+7. **收尾盘点回路状态**：明确指出台账里**还剩哪些裸奔承重假设未测**，下一步 = 继续跑它们的最便宜验证（或回 `@assumption-xray`）；若论点被反驳，下一步 = 修订 thesis。
 
 ## Output
 
@@ -43,6 +49,9 @@ eval: ./eval.md
 
 ### 若有反驳
 [关联 thesis 是否需 needsRevision，修订建议]
+
+### 下一步（回路内）
+剩余裸奔假设: [列出未测的承重假设] → 继续最便宜验证 / 修订论点
 ```
 
 ## Kernel Write-back
@@ -57,3 +66,5 @@ eval: ./eval.md
 - 一份证据别过度延伸到它没覆盖的假设。
 - 反驳是好消息：省下往错方向砸的钱。
 - 归档原文，方便日后回溯与他人复核。
+- ❌ **单条支持证据 ≠ 可以开工。** 即使某假设升到 L3/validated，只要台账里还有未验证的裸奔承重假设，就不能建议进入方案/MVP。先回 `@assumption-xray` 看还剩哪些裸奔。
+- 反驳承重假设时，走循环状态机（thesis.needsRevision=true），别默默继续推进。
