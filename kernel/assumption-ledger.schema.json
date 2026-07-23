@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AssumptionLedger",
+  "description": "假设台账：决策内核的心脏。顶层是假设对象数组。isNaked / stale 为派生字段，由 tools/validate.mjs 计算，不落盘。",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["type", "statement", "impact", "evidenceLevel", "status"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[ABCD]-[0-9]{2,}$",
+        "description": "留空则由 validator 按 <TYPE>-NN 分配"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["A", "B", "C", "D"],
+        "description": "A 用户价值 / B 商业可行 / C 技术可行 / D 安全合规"
+      },
+      "statement": { "type": "string" },
+      "impact": { "type": "string", "enum": ["high", "med", "low"] },
+      "evidenceLevel": {
+        "type": "string",
+        "enum": ["L1", "L2", "L3", "L4"],
+        "description": "L1 只是觉得 / L2 间接信号 / L3 直接证据 / L4 数据验证；不得高于 provenance.reliability 上限"
+      },
+      "status": {
+        "type": "string",
+        "enum": ["todo", "testing", "validated", "refuted"]
+      },
+      "failsIf": { "type": "string", "description": "可证伪的失败条件" },
+      "cheapestTest": { "type": "string", "description": "本周就能做的最小实验" },
+      "killCriteria": { "type": "string", "description": "触发推翻的阈值" },
+      "provenance": {
+        "type": "object",
+        "properties": {
+          "reliability": {
+            "type": "string",
+            "enum": ["self", "indirect", "direct", "data"],
+            "description": "来源可靠度：self≤L1 / indirect≤L2 / direct≤L3 / data≤L4"
+          },
+          "source": { "type": "string" },
+          "signedOffBy": { "type": ["string", "null"] },
+          "signedOffAt": { "type": ["string", "null"] }
+        }
+      },
+      "freshness": {
+        "type": "object",
+        "properties": {
+          "lastVerified": { "type": ["string", "null"], "format": "date" },
+          "ttlDays": { "type": "number", "default": 30 }
+        }
+      }
+    },
+    "additionalProperties": false
+  }
+}
