@@ -1,6 +1,6 @@
 ---
 # 复制本文件到 workspace/<你的项目名>/thesis.md 并填写（或直接跑 /new）。
-# 结构化字段（供 skill 读取）：
+# 结构化字段（供 skill 读取；revisions[] 必须写在这段 frontmatter 里，validator 只扫 frontmatter）：
 id: T-01
 schemaVersion: "4.0"
 needsRevision: false
@@ -10,6 +10,14 @@ solutionHypothesis: ""
 whyNow: ""
 successSignal: ""
 createdAt: ""
+# revisions[] 留痕：论点被证伪/pivot 时追加一条，格式见 @revise-thesis。新项目留空数组。
+revisions: []
+# 示例（不要保留，只看格式）：
+# revisions:
+#   - at: 2026-07-23
+#     reason: "B-02 refuted：目标用户不愿为自动化付费，改为按席位订阅"
+#     before: "按调用次数计费"
+#     after: "按席位订阅"
 ---
 
 # 产品论点

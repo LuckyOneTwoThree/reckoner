@@ -104,25 +104,56 @@ data.forEach((a, i) => {
 // 回写自动分配的 ID
 fs.writeFileSync(file, JSON.stringify(data, null, 2) + "\n")
 
-// —— 论点修订留痕软检查（warn，不阻断）——
-// 承重假设被推翻会置 thesis.needsRevision=true；若论点已待修订却没在 revisions[] 里
-// 留下“为什么改”，agent 下次读 thesis.md 时就丢了 pivot 理由。这里只提醒，不判失败。
+// —— 论点 thesis.md 分层执法（v1.2）——
+// 扁平标量字段硬失败（schemaVersion/id/needsRevision）；嵌套字段（revisions[]）软警告。
+// revisions 必须写在 frontmatter，否则软检查抓不到。
+// 零依赖约束：只用正则抓扁平 key:value，不解析嵌套 YAML（那需要库=engine 长回来）。
+let thesisErrors = []
 let revisionWarn = null
+let thesisNeedsRevision = false
+let thesisExists = false
 const thesisFile = file.replace(/ledger\.json$/, "thesis.md")
 if (thesisFile !== file && fs.existsSync(thesisFile)) {
+ thesisExists = true
  const fm = /^---\n([\s\S]*?)\n---/.exec(fs.readFileSync(thesisFile, "utf8"))
- if (fm) {
+ if (!fm) {
+ thesisErrors.push("thesis.md 缺 frontmatter（需 --- 包裹的结构化字段段）")
+ } else {
  const front = fm[1]
- const needsRevision = /^\s*needsRevision:\s*true\s*$/m.test(front)
+ // 扁平标量解析（只取 key: value，不解析嵌套/数组）
+ const get = (k) => {
+ const m = new RegExp(`^\\s*${k}:\\s*(.+?)\\s*$`, "m").exec(front)
+ return m ? m[1].replace(/^["']|["']$/g, "") : null
+ }
+ // 1. schemaVersion const "4.0"（硬失败）
+ const sv = get("schemaVersion")
+ if (sv === null) thesisErrors.push('thesis.md frontmatter 缺 schemaVersion（应为 "4.0"）')
+ else if (sv !== "4.0")
+ thesisErrors.push(`thesis.schemaVersion 应为 "4.0"，实际 "${sv}"`)
+ // 2. id pattern ^T-[0-9]{2,}$（硬失败）
+ const tid = get("id")
+ if (tid === null) thesisErrors.push("thesis.md frontmatter 缺 id（格式 T-NN）")
+ else if (!/^T-[0-9]{2,}$/.test(tid))
+ thesisErrors.push(`thesis.id 格式应为 T-NN（如 T-01），实际 "${tid}"`)
+ // 3. needsRevision bool（硬失败）
+ const nr = get("needsRevision")
+ if (nr === null) thesisErrors.push("thesis.md frontmatter 缺 needsRevision（应为 true/false）")
+ else if (nr !== "true" && nr !== "false")
+ thesisErrors.push(`thesis.needsRevision 应为 true/false，实际 "${nr}"`)
+ else thesisNeedsRevision = nr === "true"
+ // 4. 嵌套 revisions[] 软警告（维持原逻辑，只提醒不阻断）
  const hasRevKey = /^\s*revisions:/m.test(front)
  const inlineNonEmpty = /^\s*revisions:\s*\[\s*\{/m.test(front)
  const blockItem = /^\s*revisions:\s*$[\s\S]*?^\s*-\s/m.test(front)
  const hasRevItem = inlineNonEmpty || blockItem
- if (needsRevision && !hasRevItem)
+ if (thesisNeedsRevision && !hasRevItem)
  revisionWarn = hasRevKey
  ? "thesis.needsRevision=true 但 revisions[] 为空——论点待修订却没记录『为什么改』。"
- : "thesis.needsRevision=true 但缺 revisions[]——修订论点时请追加一条 {at, reason, before, after}。"
+ : "thesis.needsRevision=true 但缺 revisions[]——修订论点时请追加一条 {at, reason, before, after}（必须写在 frontmatter，否则 validator 抓不到）。"
  }
+} else if (thesisFile !== file) {
+ // thesis.md 不存在：软提醒，不硬失败（validator 主职是 ledger）
+ revisionWarn = `未找到 ${thesisFile}——thesis 是北极星，建议尽快创建（跑 /new 或复制 kernel/templates/thesis.md）。`
 }
 
 console.log(`\n=== 内核校验: ${file} ===`)
@@ -139,9 +170,41 @@ if (revisionWarn)
  console.warn(
  `\n\u26a0\ufe0f  留痕提醒: ${revisionWarn}\n   （仅提醒，不影响校验结果；到 /review 时补上论点修订理由，并将 needsRevision 复位 false）`,
  )
+if (thesisExists) {
+ console.log(`   thesis: ${thesisErrors.length ? "\u274c " + thesisErrors.length + " 项硬约束违规" : "\u2705 扁平字段合规"}`)
+}
+
+// —— 启发式下一步（v1.2：复用已有 summary，零新命令）——
+// 不编排、只读提示；告诉用户回路里下一个该跑哪个 skill/命令。
+// 仅在无硬失败时打印（有硬失败时先修违规，谈下一步没意义）。
+if (errors.length === 0 && thesisErrors.length === 0) {
+ const next = []
+ if (thesisNeedsRevision) next.push("@revise-thesis（论点待修订）")
+ if (needSignoff.length) next.push("/review（有待 sign-off 的强声明）")
+ if (naked.length) {
+ const hasTodoNaked = data.some(
+ (a) => a.impact === "high" && (a.evidenceLevel === "L1" || a.evidenceLevel === "L2") && a.status === "todo",
+ )
+ const hasTestingNaked = data.some(
+ (a) => a.impact === "high" && (a.evidenceLevel === "L1" || a.evidenceLevel === "L2") && a.status === "testing",
+ )
+ if (hasTodoNaked) next.push("@experiment-design（把裸奔假设的最便宜验证落成实验规格）")
+ if (hasTestingNaked) next.push("@evidence-intake（实验跑完，落回台账）")
+ }
+ if (next.length === 0 && !thesisNeedsRevision)
+ console.log(`\n\ud83d\udc49 下一步: 回路暂无待办（无裸奔/无待修订/无待 sign-off）。可跑 /decide 收口决策。`)
+ else if (next.length)
+ console.log(`\n\ud83d\udc49 下一步: ${next.join(" / ")}`)
+}
+
 if (errors.length) {
  console.error(`\n\u274c 校验失败（${errors.length}）：`)
  errors.forEach((e) => console.error(` - ${e}`))
+ process.exit(1)
+}
+if (thesisErrors.length) {
+ console.error(`\n\u274c thesis 校验失败（${thesisErrors.length}）：`)
+ thesisErrors.forEach((e) => console.error(` - ${e}`))
  process.exit(1)
 }
 console.log("\n\u2705 校验通过\n")

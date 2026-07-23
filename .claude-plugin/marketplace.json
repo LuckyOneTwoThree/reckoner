@@ -1,22 +1,26 @@
 {
   "name": "playbook",
-  "version": "0.1.0",
-  "description": "给主观易自欺的产品决策，装一个会顶嘴、有记忆的决策内核。照妖镜 + 假设台账 + 分级 sign-off。",
+  "version": "0.2.0",
+  "description": "给主观易自欺的产品决策，装一个会顶嘴、有记忆的决策内核。照妖镜 + 假设台账 + 分级 sign-off + 闭环回路。",
   "author": "lemon-tree",
   "plugins": [
     {
       "name": "playbook",
       "source": ".",
-      "description": "PM 决策内核 P0：thesis + assumption-ledger 两对象，4 个 skill，2 个命令，1 个 validator。",
+      "description": "PM 决策内核 P0：thesis + assumption-ledger 两对象，6 个 skill，4 个命令，1 个 validator。",
       "skills": [
         "skills/assumption-xray",
         "skills/user-insight",
         "skills/competitor-teardown",
-        "skills/evidence-intake"
+        "skills/evidence-intake",
+        "skills/experiment-design",
+        "skills/revise-thesis"
       ],
       "commands": [
         "commands/new.md",
-        "commands/review.md"
+        "commands/list.md",
+        "commands/review.md",
+        "commands/decide.md"
       ]
     }
   ]

@@ -57,13 +57,14 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 
 ## 铁律（每次回写都要守）
 
-1. **写台账前后都跑校验**：任何对 `ledger.json` 的改动，结束时必须 `node tools/validate.mjs workspace/<project>/ledger.json`，通过才算完成。
+1. **写台账前后都跑校验**：任何对 `ledger.json` 的改动，结束时必须 `node tools/validate.mjs workspace/<project>/ledger.json`，通过才算完成。validator 现在也**硬校验 thesis.md 的扁平字段**（schemaVersion="4.0" / id=T-NN / needsRevision=bool）——改了 thesis 也要跑。revisions[] 必须写在 frontmatter，否则软检查抓不到。
 2. **ID 交给脚本**：新假设 `id` 留空，由 validator 按 `<TYPE>-NN` 分配；不要自己编号。
 3. **证据等级有上限**：`evidenceLevel` 不得高于来源 `provenance.reliability` 的上限（self≤L1 / indirect≤L2 / direct≤L3 / data≤L4）。
-4. **分级 sign-off**：结构性改动和 ≤L2 自动落库；`≥L3` 或 `status→validated/refuted` 必须走 `/review` 人工确认，不要自作主张标已验证。
-5. **循环状态机**：某承重假设 `status→refuted` 时，给关联 `thesis.needsRevision=true` 并提示修订，别默默改论点。
+4. **分级 sign-off**：结构性改动和 ≤L2 自动落库；`≥L3` 或 `status→validated/refuted` 必须走 `/review` 人工确认，不要自作主张标已验证。`signedOffBy` 格式：人工写人名/邮箱本地名，agent 代批写 `agent:<skill或命令名>`，未签字保持 `null`。
+5. **循环状态机**：某承重假设 `status→refuted` 时，给关联 `thesis.needsRevision=true` 并提示修订，别默默改论点。状态转移合法性见 `kernel/writeback-contract.md` §4.1。
 6. **裸奔/过期是算出来的**：`isNaked`、`stale` 由 validator 计算，不落盘，不要手写进 JSON。
 7. **多项目隔离**：动手前先回显 `当前项目: workspace/<project>/` 并确认；只动这个目录，ID 项目内编号，别跨项目串写。**同一会话只做一个项目**——检测到切换项目时，先提示用户开新会话或显式确认再继续（上下文串味是文件隔离堵不住的漏）。
+8. **跟着 validator 的下一步提示走**：校验通过后，validator 会打印 `👉 下一步` 启发式（有裸奔→@experiment-design/@evidence-intake；needsRevision→@revise-thesis；待 sign-off→/review；全清→/decide）。这是回路接力的显式提示，别无视它另起方案。
 
 ## 环境差异
 

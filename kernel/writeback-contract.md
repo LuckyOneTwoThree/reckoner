@@ -19,6 +19,10 @@
 - **自动落库**：结构性改动 + `evidenceLevel ≤ L2`。跑完 skill 直接写，不打断用户。
 - **需确认**：`evidenceLevel ≥ L3`，或 `status` 拟改为 `validated`/`refuted`。这类先挂“待确认”，攒到 `/review` 一次批。
 - sign-off 通过后写入 `provenance.signedOffBy` + `signedOffAt`，并刷新 `freshness.lastVerified`。
+- **signedOffBy 值格式**（v1.2 规定，便于跨项目复盘读得懂）：
+  - 字符串。两种合法值：人工签字写人名或邮箱本地名（如 `"alice"` / `"leo@team"`）；agent 代批写 `agent:<skill 或命令名>`（如 `"agent:/review"`）。
+  - `null` = 未签字（待 sign-off 项的初始值）。
+  - 不接受空字符串 `""`；要签字就写真值，不签字就保持 `null`。
 
 ## 3. 证据等级上限（Reliability Cap）
 
@@ -51,6 +55,23 @@ needsRevision 复位 false
 ```
 
 影响等级从非 high 升到 high、或裸奔假设被验证/推翻，同样触发上面的复查。
+
+### 4.1 合法状态转移图（v1.2 显式列出）
+
+`assumption.status` 只允许以下转移，非法转移由 agent 在回写时拦下（validator 不强制 status 转移合法性，靠 skill 自律 + /review 兜底）：
+
+```
+todo ──(experiment-design 设计实验)──→ testing
+todo ──(直接被证据推翻，evidence-intake)──→ refuted     [允许，跳过 testing]
+testing ──(证据支持 + /review sign-off)──→ validated
+testing ──(证据反驳 + /review sign-off)──→ refuted
+testing ──(发现实验设计错，回炉)──→ todo                  [允许回退]
+validated ──(新证据推翻，evidence-intake)──→ refuted      [允许，触发 needsRevision]
+refuted ──(论点 pivot 后重新成立)──→ todo                  [允许，新论点下重测]
+```
+
+**不允许**：`validated → todo`（已验证不能退回未测，除非论点 pivot）、`validated → testing`（要重测就先 refuted 再 pivot）。
+**一次到位允许**：`todo → validated`（一次实验直接验证通过）和 `todo → refuted`（没测就被推翻）都合法——只要证据等级与 sign-off 到位。
 
 ## 5. 派生字段（不落盘）
 

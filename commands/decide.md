@@ -28,5 +28,9 @@ description: "在一轮验证跑完、/review sign-off 之后，把『这个方�
 ## 说明
 
 - `decisions.md` 是**纯 append 日志**，只增不改——改历史 = 骗自己。它不入内核 schema，不经 validate.mjs。
+- **边界声明（v1.2）**：`decisions.md` 是应用户请求落地的 P0 补充件，**不是** Phase 1.5 的 decision-log。区别：
+  - 不进 `kernel/*.schema.json`，不进 `tools/validate.mjs`，不享受 ID 分配/信任分级/sign-off。
+  - 只是 `workspace/<项目>/` 下的 markdown 片段，格式约定见本文档"流程"第 4 步。
+  - 若日后需要结构化决策日志 + /retro + 校准闭环，那是 Phase 1.5 的新对象，届时再设计 schema，不把当前片段约定升级成 schema。
 - **go 是唯一允许离开内核、进入“造”的闸门**——且必须没有仍裸奔的承重假设。别在还有裸奔假设时点 go。
 - 决策日志是日后跨项目校准（Phase 1.5）的原料：你过去的 go/kill 判断准不准，全靠它复盘。

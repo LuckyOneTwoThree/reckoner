@@ -227,9 +227,9 @@ needsRevision 复位 false
 
 - [x] 仓库骨架：README / AGENTS.md / CLAUDE.md / .claude-plugin/marketplace.json / docs/ARCHITECTURE.md
 - [x] kernel：thesis.schema.json、assumption-ledger.schema.json、writeback-contract.md、templates/thesis.md
-- [x] skills：assumption-xray（+eval.md）、user-insight、competitor-teardown、evidence-intake
-- [x] commands：new.md、review.md
-- [x] tools：new-project.mjs（一键初始化）、validate.mjs（确定性校验）
+- [x] skills：assumption-xray（+eval.md）、user-insight（+stub eval）、competitor-teardown（+stub eval）、evidence-intake（+stub eval）、experiment-design（+eval.md）、revise-thesis（+eval.md）—— 6 skill 全闭环
+- [x] commands：new.md、list.md、review.md、decide.md
+- [x] tools：new-project.mjs（一键初始化）、validate.mjs（确定性校验，含 thesis 扁平字段硬校验 + 启发式下一步提示）
 - [x] 示例项目：workspace/async-standup/（填好的 thesis + 3 条种子假设 ledger + sources/）
 
 ### 12.2 已验证（实测通过）
@@ -252,19 +252,21 @@ needsRevision 复位 false
 
 **A. 命名与文档同步（优先）**
 
-- [ ] 统一项目命名为 `playbook`：README 目录树、根目录名等历史上写作 `pm-superpower/`，需与仓库名 `playbook` 对齐（保留「PM Superpower」作产品理念副标题）。
+- [x] 统一项目命名为 `playbook`：README / AGENTS / marketplace.json 全部对齐（保留「PM Superpower」作产品理念副标题）。
 - [x] 把 Master Plan 同步为仓库内 `docs/PROJECT-PLAN.md`（本文件），README 目录树补上该条目。
+- [x] 事实源对齐：marketplace.json / README / CLAUDE.md / ARCHITECTURE.md / 本文件 全部同步到 6 skill + 4 命令的回路闭合定义（v1.2）。
 
 **B. 实测与打磨**
 
-- [ ] 在 Cowork / Codex 里实测整条冷启动（/new → 填 thesis → 照妖镜 → evidence → review），并回填实测结果。
-- [ ] 把 4 个 SKILL 的措辞对照方法论「决策内核」「Agent 工作流」两页做一次「接地」打磨（当前用通用内核词汇）。
+- [ ] 在 Cowork / Codex 里实测整条冷启动（/new → 填 thesis → 照妖镜 → experiment-design → evidence → review → decide），并回填实测结果。
+- [ ] **第 0 位：playbook 自身 A/B 验证**——找 3 个 PM 真实跑一遍，量是否回来第二次。这是项目自身的承重假设，比引擎打磨更优先。
+- [ ] 把 6 个 SKILL 的措辞对照方法论「决策内核」「Agent 工作流」两页做一次「接地」打磨（当前用通用内核词汇）。
 
 **C. 工程化完善（可选，提升可维护性）**
 
 - [ ] 补 `LICENSE`、`.gitignore`、`package.json`（`npm run validate` 脚本入口）。
 - [ ] 轻量 CI（GitHub Actions：push 时跑 `validate.mjs` + 照妖镜 eval），把「脚本负责纪律」固化到流水线。
-- [ ] `/list` 命令（列出所有项目 + 各自裸奔假设数）。
+- [ ] `/list` 脚本化（触发条件：用户跑到第 3 个项目时；当前 `ls workspace/` + agent 读 thesis 够用）。
 
 ### 13.2 Phase 1.5（带触发条件才做）
 
@@ -312,3 +314,4 @@ needsRevision 复位 false
 | --- | --- | --- |
 | Master Plan v1 | 2026-07-23 | 首次成文：锁定 P0 精简架构、四 skill、内核契约、agent 集成、决策记录与路线图。 |
 | Master Plan v1.1 | 2026-07-23 | 对齐 GitHub P0 现状：统一项目名 playbook、代码事实源改为 GitHub 仓库、细化 P0 收尾路线为 A/B/C（命名同步 / PROJECT-PLAN 回流 / 端到端实测 / 工程化完善）。 |
+| Master Plan v1.2 | 2026-07-23 | 闭环回路补齐：新增 @experiment-design（实验规格）/ @revise-thesis（论点修订）/ /decide（go·pivot·kill 决策日志）/ /list（多项目只读列举）。validator 升级为分层执法（thesis 扁平字段硬失败、嵌套软警告、frontmatter 锚定）+ 启发式下一步提示。3 个配角 skill 补 stub eval.md。事实源全量对齐到 6 skill / 4 命令。ADR 补记 /list、/decide 为 P0 应用户请求补充件（不入内核 schema、不经 validate）。 |

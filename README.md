@@ -20,10 +20,12 @@
    ```
    自动生成 `workspace/<项目名>/{thesis.md, ledger.json, sources/}`。
 3. 打开 `workspace/<项目名>/thesis.md`，填写六格论点。
-4. 召唤照妖镜：`@assumption-xray <你的想法或论点>`
-5. 采集证据：`@evidence-intake <访谈 / 竞品 / 数据 / 链接>`
-6. 每周批量确认强声明：`/review`
-7. 校验内核：`node tools/validate.mjs workspace/<项目名>/ledger.json`
+4. 召唤照妖镜：`@assumption-xray <你的想法或论点>`（红队：点名裸奔假设 + 最便宜验证）
+5. 设计实验：`@experiment-design`（把最便宜验证落成可追踪实验规格，`status→testing`）
+6. 跑完实验 → 采集证据：`@evidence-intake <访谈 / 竞品 / 数据 / 链接>`
+7. 每周批量确认强声明：`/review`
+8. 收口决策：`/decide`（go / pivot / kill，写 `decisions.md`；pivot → `@revise-thesis` 修订论点）
+9. 校验内核：`node tools/validate.mjs workspace/<项目名>/ledger.json`（validator 会提示下一步该跑哪个 skill）
 
 ## 目录结构
 
@@ -40,12 +42,16 @@ playbook/
 │  └─ templates/thesis.md
 ├─ skills/                      # 原子能力，独立可触发
 │  ├─ assumption-xray/          # 🔍 主角：假设红队（照妖镜）
-│  ├─ user-insight/             # 👤 用户洞察
-│  ├─ competitor-teardown/      # ⚔️ 竞品拆解
-│  └─ evidence-intake/          # 📥 证据采集
+│  ├─ user-insight/             # 👤 用户洞察（产 A 类假设）
+│  ├─ competitor-teardown/      # ⚔️ 竞品拆解（产 B/C 类假设）
+│  ├─ evidence-intake/          # 📥 证据采集（落回台账）
+│  ├─ experiment-design/        # 🧪 实验设计（cheapest test → 实验规格）
+│  └─ revise-thesis/            # ✏️ 论点修订（闭合循环）
 ├─ commands/
 │  ├─ new.md                    # 一键初始化新项目
-│  └─ review.md                 # 批量 sign-off
+│  ├─ list.md                   # 列出所有项目
+│  ├─ review.md                 # 批量 sign-off
+│  └─ decide.md                 # go / pivot / kill 决策日志
 ├─ tools/
 │  ├─ new-project.mjs           # 初始化脚本（零依赖）
 │  └─ validate.mjs              # 唯一代码：schema + 信任 + ID 护栏
@@ -81,6 +87,6 @@ playbook/
 
 ## 路线图
 
-- **P0（本仓库）**：thesis + ledger 两对象 + 4 skill + 采集 + validator + 项目初始化 + agent 约定。
+- **P0（本仓库）**：thesis + ledger 两对象 + 6 skill（含实验设计、论点修订）+ 4 命令（含 /list、/decide）+ validator + 项目初始化 + agent 约定。回路闭合：照妖镜 → 实验设计 → 证据采集 → review → decide → 论点修订。
 - **Phase 1.5**：个人层（跨项目）、OST、决策日志 + 校准闭环（/retro）。
 - **Phase 2**：Web 体检仪表盘。

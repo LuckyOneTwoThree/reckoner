@@ -11,9 +11,14 @@
 ## P0 范围（本仓库）
 
 - 内核对象：**thesis + assumption-ledger（+ sources 归档）**，仅此。
-- 4 个 skill：🔍 assumption-xray（主角）/ 👤 user-insight / ⚔️ competitor-teardown / 📥 evidence-intake，全部 standalone-first。
-- 2 个命令：`/new`（初始化项目）、`/review`（批量 sign-off）。
-- 1 个工具：`tools/validate.mjs`（唯一确定性代码）。
+- 6 个 skill（回路闭合，全部 standalone-first）：
+  - 🔍 assumption-xray（主角，红队关口）
+  - 👤 user-insight / ⚔️ competitor-teardown（入料口，产 A / B·C 类假设）
+  - 🧪 experiment-design（cheapest test → 实验规格，status→testing）
+  - 📥 evidence-intake（收口，落回台账）
+  - ✏️ revise-thesis（循环闭合，论点修订留痕）
+- 4 个命令：`/new`（初始化）、`/list`（多项目只读列举）、`/review`（批量 sign-off）、`/decide`（go/pivot/kill 决策日志）。
+- 1 个工具：`tools/validate.mjs`（唯一确定性代码，分层执法：ledger 全校验 + thesis 扁平字段硬失败 + 启发式下一步提示）。
 - 多项目：`workspace/<id>/` 隔离状态；`skills/`、`kernel/`、`tools/` 共享。
 
 ## 内核数据模型
@@ -30,8 +35,10 @@
 
 - **engine 作为代码全砍**，只留一个薄 validator：kernel-store（文件系统够用）、orchestrator（slash 命令免费）、vitals 仪表盘（信号未验证）全部推迟；回写从“自动”降级为“人工 sign-off + 确定性校验”。
 - **派生字段不落盘**（isNaked/stale）：避免陈旧，每次现算。
-- **单一 history**：只有 thesis.revisions[]，不引入独立 decision-log（Phase 1.5 再说）。
+- **单一 history**：只有 thesis.revisions[]，不引入独立 decision-log（Phase 1.5 再说）。（注：`/decide` 写入的 `decisions.md` 是应用户请求落地的纯 append 日志，**不入内核 schema、不经 validate**，属 P0 补充件而非 Phase 1.5 decision-log。）
 - **evidenceLevel 与 reliability 合并语义**：等级由来源可靠度封顶，避免两套字段打架。
+- **validator 分层执法**（v1.2）：对 ledger.json 全校验（schema + 证据等级上限 + ID 分配 + 派生字段）；对 thesis.md 的**扁平标量字段**（schemaVersion const、id pattern、required）硬失败 exit 1；对**嵌套字段**（revisions[]）维持软警告。既锁住北极星最致命的部分，又守住零依赖（不引 YAML 库、不写 engine）。revisions[] 必须写在 frontmatter，否则软检查抓不到。
+- **回路显式闭合**（v1.2）：`/list` 与 `/decide` 是应用户请求新增的 P0 补充件（非原 4-skill/2-command 锁定范围）。`/decide` 的 `decisions.md` 不进 schema；`/list` 当前用 `ls workspace/` + agent 读 thesis，脚本化推迟到第 3 个项目出现时。
 
 ## Agent 集成
 

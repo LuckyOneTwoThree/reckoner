@@ -26,6 +26,10 @@ metadata:
 > **动手前先回显当前项目**：先声明 `当前项目: workspace/<slug>/`，确认它就是本次要读写的项目。若同一会话此前在操作别的项目，先提示开新会话或让用户确认切换，再继续。本次所有读写（含存入 sources/）只落在这个目录内。
 
 1. 把证据原文/截图/链接存进 `workspace/<项目>/sources/`，给个可引用的文件名。
+   - **命名约定（v1.2）**：`YYYYMMDD_<reliability>_<slug>.<ext>`，如 `20260723_direct_alice-interview.md`、`20260723_data_pricing-test.png`。
+   - `reliability` 用 self/indirect/direct/data 四值，与台账 `provenance.reliability` 对齐，方便日后按可靠度筛证据。
+   - `slug` 简短描述来源（人名/渠道/实验名），小写连字符。
+   - 一份证据影响多条假设时只存一份文件，在台账 `provenance.source` 里多条假设指向同一文件名。
 2. 判定证据类型与可靠度（self/indirect/direct/data）。
 3. 找出它影响哪条假设（可多条），判断是**支持**还是**反驳**。
 4. 对每条受影响假设：
