@@ -1,51 +1,45 @@
+<div align="center">
+
 # playbook
 
-给主观、可刷、易自欺的产品决策，装一个**会顶嘴、有记忆**的决策内核。
+**会顶嘴、有记忆的决策内核**
 
-照妖镜是钩子，内核是留存，跨项目校准是护城河。它不是无状态的文档生成器，是一个会积累的决策 OS。
+给主观、可刷、易自欺的产品决策，装一个不附和、会积累的决策 OS。
 
-`P0` · `6 Skills` · `4 Commands` · `Claude Code / Cowork / Codex` · [GitHub](https://github.com/LuckyOneTwoThree/playbook)
+[![P0](https://img.shields.io/badge/stage-P0-blue)]()
+[![Skills](https://img.shields.io/badge/skills-6-green)]()
+[![Commands](https://img.shields.io/badge/commands-4-green)]()
+[![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
+[![GitHub](https://img.shields.io/badge/repo-playbook-black?logo=github)](https://github.com/LuckyOneTwoThree/playbook)
 
----
-
-## 这是什么
-
-**playbook** 是一套面向 PM / 产品负责人的**决策内核 + 原子能力插件包**，覆盖从 0→1 的想法阶段到设计产出。
-
-与普通 AI PM 助手最大的不同：**每个 skill 跑完都把结论回写内核**（假设台账 / 论点），跨会话记住你的假设、证据与到期项——它不会每次从零开始，而是持续积累成可复用的**判断资产**。
-
-> 核心公式：照妖镜（钩子）→ 决策内核（留存）→ 跨项目校准（护城河）
+</div>
 
 ---
 
-## 为什么需要它
+> 照妖镜是钩子，内核是留存，跨项目校准是护城河。
+> 它不是无状态的文档生成器，是一个会积累的决策 OS。
 
-产品决策天然主观、容易被自己「刷」出信心、容易自欺。现有 AI PM 助手大多是**无状态文档生成器**，playbook 正面直击三大反模式。
+## 为什么
 
-**反模式**
+产品决策天然主观、容易被自己「刷」出信心、容易自欺。现有 AI PM 助手大多是**无状态文档生成器**，playbook 正面直击三大反模式：
 
-- 每次对话从零开始，不记得上次的假设和证据
-- 倾向附和（谄媚），不会真的顶你
-- 结论散落在文档里，无法积累成判断资产
-
-**playbook 的解法**
-
-- **有记忆** — 结论回写内核，跨会话留存
-- **会顶嘴** — 默认「风险是真的」，先 steelman 再攻击
-- **可追溯** — 假设-证据-决策显式化为链路
-
----
+| 反模式 | playbook 的解法 |
+| --- | --- |
+| 每次对话从零开始，不记得上次的假设和证据 | **有记忆** — 结论回写内核，跨会话留存 |
+| 倾向附和（谄媚），不会真的顶你 | **会顶嘴** — 默认「风险是真的」，先 steelman 再攻击 |
+| 结论散落在文档里，无法积累成判断资产 | **可追溯** — 假设-证据-决策显式化为链路 |
 
 ## 核心概念
 
-> **第一原则**：LLM 负责判断，脚本负责纪律。LLM 做拆解、攻击、归类、写作；确定性的校验、ID 分配、上限约束交给 `tools/*.mjs`。二者不互相替代。
+> **第一原则**：LLM 负责判断，脚本负责纪律。
+> LLM 做拆解、攻击、归类、写作；确定性的校验、ID 分配、上限约束交给 `tools/*.mjs`。二者不互相替代。
 
 ### 两个内核对象
 
 | 对象 | 角色 | 说明 |
 | --- | --- | --- |
-| **thesis**（论点） | 北极星 | 必须可被证伪的陈述：目标用户 / 核心问题 / 解法假设 / 为什么现在 / 成功信号 |
-| **assumption-ledger**（假设台账） | 心脏 | 把论点拆解为可验证假设，分类管理、分级留存——决策内核最核心的对象 |
+| **thesis** | 北极星 | 必须可被证伪的陈述：目标用户 / 核心问题 / 解法假设 / 为什么现在 / 成功信号 |
+| **assumption-ledger** | 心脏 | 把论点拆解为可验证假设，分类管理、分级留存——决策内核最核心的对象 |
 
 ### 四类假设 · A / B / C / D
 
@@ -58,24 +52,20 @@
 
 ### 证据分级 · L1 → L4
 
-可靠度上限硬约束：`evidenceLevel` 不得高于来源 `reliability` 的上限。
+可靠度上限硬约束：`evidenceLevel` 不得高于来源 `reliability` 的上限。违反由 `validate.mjs` 判校验失败（exit 1）。
 
 | 等级 | 含义 | 来源上限 |
 | --- | --- | --- |
-| **L1** | 只是觉得 | self |
-| **L2** | 间接信号 | indirect |
-| **L3** | 直接证据 | direct |
-| **L4** | 数据验证 | data |
-
-违反由 `validate.mjs` 判校验失败（exit 1）。
+| **L1** | 只是觉得 | `self` |
+| **L2** | 间接信号 | `indirect` |
+| **L3** | 直接证据 | `direct` |
+| **L4** | 数据验证 | `data` |
 
 ### 其他关键机制
 
 - **裸奔假设** = 影响高 × 证据弱（validator 自动判定，不落盘）——最该优先验证的对象
 - **分级 sign-off** — 弱证据 / 结构改动自动落库；`≥L3` 或 `status` 变更需人工确认（`/review`）
 - **活的闭环** — 承重假设被推翻 → 论点自动标 `needsRevision` → 修订留痕（`thesis.revisions[]`）
-
----
 
 ## 决策回路
 
@@ -93,9 +83,7 @@ flowchart LR
     F -->|kill| I["🗑 终止并留痕"]
 ```
 
-**回路外产出**：`/decide go` 之后才允许进入交付（造产品 / 写 PRD / 排期）。这些产出属"回路外补充件"，写入 `workspace/<项目>/artifacts/`（约定见 AGENTS.md），**不入内核 schema、不经 validate**——和 `decisions.md` 同级逻辑。
-
----
+> **回路外产出**：`/decide go` 之后才允许进入交付（造产品 / 写 PRD / 排期）。这些产出属"回路外补充件"，写入 `workspace/<项目>/artifacts/`（约定见 AGENTS.md），**不入内核 schema、不经 validate**——和 `decisions.md` 同级逻辑。
 
 ## 快速开始
 
@@ -103,6 +91,7 @@ flowchart LR
 
 ```bash
 # 1. 加载本仓库（agent 会先读 AGENTS.md 建立上下文）
+
 # 2. 新建项目
 node tools/new-project.mjs <项目名>      # 或在 agent 里 /new
 # → 自动生成 workspace/<项目名>/{thesis.md, ledger.json, sources/}
@@ -128,15 +117,13 @@ node tools/validate.mjs workspace/<项目名>/ledger.json
 # validator 会提示下一步该跑哪个 skill
 ```
 
----
-
 ## 能力清单
 
 ### Skills
 
 | Skill | 触发 | 主要产出 |
 | --- | --- | --- |
-| **assumption-xray**（照妖镜 · 主角） | `@assumption-xray <想法>` | A/B/C/D 拆解 + 裸奔排序 + 最致命追问 + 每条 Fails if / 最便宜验证 / kill 标准 |
+| **assumption-xray** · 照妖镜（主角） | `@assumption-xray <想法>` | A/B/C/D 拆解 + 裸奔排序 + 最致命追问 + 每条 Fails if / 最便宜验证 / kill 标准 |
 | **user-insight** | `@user-insight <访谈/反馈>` | 2–4 个洞察主题 + 可证伪 A 类假设 |
 | **competitor-teardown** | `@competitor-teardown <竞品>` | 竞品矩阵（含「现状凑合方案」）+ 市场缺口 → B/C 类假设 |
 | **evidence-intake** | `@evidence-intake <证据>` | 归档 sources/ + 升降级台账 + 触发反驳循环 |
@@ -151,8 +138,6 @@ node tools/validate.mjs workspace/<项目名>/ledger.json
 | `/list` | 列出所有项目 + 各自裸奔假设数 / 待 sign-off 数 |
 | `/review` | 批量 sign-off（扫描 ≥L3 或状态终局且未签字项） |
 | `/decide` | go / pivot / kill 决策日志（写 `decisions.md`，不入 schema） |
-
----
 
 ## 目录结构
 
@@ -184,15 +169,13 @@ playbook/
 └─ docs/ARCHITECTURE.md         # 锁定版设计说明
 ```
 
----
-
 ## 内核数据契约
 
-**thesis（产品论点）**
+**thesis**（产品论点）
 
 `id`（`T-NN`）· `schemaVersion`（`"4.0"`）· `statement` · `targetUser` · `coreProblem` · `solutionHypothesis` · `whyNow` · `successSignal` · `needsRevision`（bool，承重假设被推翻时自动置位）· `revisions[]`（唯一 history 机制）· `createdAt`
 
-**assumption-ledger（假设台账）**
+**assumption-ledger**（假设台账）
 
 `id`（`<TYPE>-NN`）· `type`（A/B/C/D）· `statement` · `impact`（high/med/low）· `evidenceLevel`（L1–L4）· `status`（todo/testing/validated/refuted）· `failsIf` · `cheapestTest` · `killCriteria` · `provenance{ reliability, source, signedOffBy, signedOffAt }` · `freshness{ lastVerified, ttlDays }`
 
@@ -203,8 +186,6 @@ playbook/
 - `decisions.md` — `/decide` 的纯 append 决策日志
 - `artifacts/` — `/decide go` 后的产品交付物（PRD / 商业分析等）
 
----
-
 ## 在 Agent 工具里怎么用
 
 | 工具 | 发现方式 |
@@ -214,15 +195,11 @@ playbook/
 
 > 命令行是**确定性脊椎**（护栏），agent 是**友好门面**——你只碰门面。
 
----
-
 ## 设计哲学
 
 - **对抗而非附和** — 默认「风险是真的」，先 steelman 再攻击，不打稻草人，也不制造虚假怀疑
 - **可信的记忆才值得留存** — 不可信的记忆比没有记忆更糟，所以有信任分级 + 确定性校验硬闸
 - **精简优先** — P0 只做被真实用到的东西，一切「看起来更完整」的层都推迟到有触发条件时再建
-
----
 
 ## 血统
 
@@ -234,23 +211,17 @@ playbook/
 
 两边都**不整包照抄**：方法论抽内核不搬长文；skill 工程抄结构不抄广度。
 
----
-
 ## 多项目
 
 一套框架多项目并存：`skills/` `kernel/` `tools/` 共享，`workspace/<项目>/` 隔离状态，ID 项目内编号、互不冲突。跨项目学习（`kernel/personal/`）为 Phase 1.5，纯增益、不冲突。
-
----
 
 ## 路线图
 
 | 阶段 | 内容 |
 | --- | --- |
 | **P0**（本仓库） | thesis + ledger 两对象 + 6 skill + 4 命令 + validator + 项目初始化 + agent 约定。回路闭合：照妖镜 → 实验设计 → 证据采集 → review → decide → 论点修订 |
-| **Phase 1.5** | 个人层（跨项目学习）、OST（机会方案树）、结构化决策记录 + 校准闭环（/retro） |
+| **Phase 1.5** | 个人层（跨项目学习）、OST（机会方案树）、结构化决策记录 + 校准闭环（`/retro`） |
 | **Phase 2** | Web 体检仪表盘（内核数据稳定、需要可视化留存时） |
-
----
 
 ## 校验与质量
 
@@ -261,3 +232,11 @@ playbook/
 - **启发式下一步提示** — 校验通过后打印 `👉 下一步`（有裸奔→`@experiment-design`/`@evidence-intake`；`needsRevision`→`@revise-thesis`；待 sign-off→`/review`；全清→`/decide`）
 
 **eval 纪律** — assumption-xray / experiment-design / revise-thesis 各有 5 条 eval；user-insight / competitor-teardown / evidence-intake 为 stub（触发条件未到，精简不镀金）。
+
+---
+
+<div align="center">
+
+<sub>playbook · 决策 OS for PM</sub>
+
+</div>
