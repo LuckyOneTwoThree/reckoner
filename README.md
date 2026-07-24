@@ -138,6 +138,8 @@ node tools/validate.mjs workspace/<项目名>/ledger.json
 | `/list` | 列出所有项目 + 各自裸奔假设数 / 待 sign-off 数 |
 | `/review` | 批量 sign-off（扫描 ≥L3 或状态终局且未签字项） |
 | `/decide` | go / pivot / kill 决策日志（写 `decisions.md`，不入 schema） |
+| `/retro` | 复盘决策校准（取 git-SHA 快照对照当时假设分布 vs 现在结果） |
+| `/lookup` | 跨项目查历史教训（扫全 workspace 按关键词/type/status 检索） |
 
 ## 目录结构
 
@@ -160,10 +162,12 @@ playbook/
 │  ├─ experiment-design/        # 实验设计（cheapest test → 规格）
 │  └─ revise-thesis/            # 论点修订（闭合循环）
 ├─ commands/
-│  ├─ new.md · list.md · review.md · decide.md
+│  ├─ new.md · list.md · review.md · decide.md · retro.md · lookup.md
 ├─ tools/
 │  ├─ new-project.mjs           # 初始化脚本（零依赖）
-│  └─ validate.mjs              # 唯一代码：schema + 信任 + ID 护栏
+│  ├─ validate.mjs              # 唯一确定性纪律闸：schema + 信任 + ID 护栏
+│  ├─ migrate.mjs               # schemaVersion 迁移（4.0→4.1）
+│  └─ lookup.mjs                # 跨项目检索（无状态，Phase 1.5 护城河）
 ├─ workspace/                   # 用户工作区（gitignored，不入库——runtime 数据）
 │  └─ <project>/                # 跑 /new 后生成，每个项目一个隔离文件夹
 └─ docs/ARCHITECTURE.md         # 锁定版设计说明

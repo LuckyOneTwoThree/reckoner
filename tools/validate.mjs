@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 // validate.mjs — 决策内核的确定性硬闸（零依赖）。
-// 用法: node tools/validate.mjs <ledger.json 路径>
+// 用法: node tools/validate.mjs <ledger.json 路径> [--check]
 // 职责: 枚举校验 / 证据等级不超来源上限 / ID 自动分配 / 计算裸奔·过期 / 标记待 sign-off。
+//       v1.3: 承重假设强制(refuted→needsRevision) / 强证据必须声明来源 / killCriteria 数字检测。
 // 设计哲学: LLM 负责判断，脚本负责纪律。校验失败 exit 1。
+// --check: 只读模式（CI 用），不回写文件；有未分配 ID 则报错。
 
 import fs from "node:fs"
 
@@ -21,8 +23,11 @@ function die(msg) {
  process.exit(1)
 }
 
-const file = process.argv[2]
-if (!file) die("用法: node tools/validate.mjs <ledger.json 路径>")
+// 解析命令行参数
+const args = process.argv.slice(2)
+const checkOnly = args.includes("--check")
+const file = args.find((a) => !a.startsWith("--"))
+if (!file) die("用法: node tools/validate.mjs <ledger.json 路径> [--check]")
 if (!fs.existsSync(file)) die(`找不到文件: ${file}`)
 
 let data
@@ -34,6 +39,8 @@ try {
 if (!Array.isArray(data)) die("ledger 顶层必须是数组 []")
 
 const errors = []
+const killWarn = [] // killCriteria 无数字阈值（软警告）
+let newIdsAssigned = false
 const usedByType = {}
 for (const a of data) {
  if (a && a.id) {
@@ -71,14 +78,20 @@ data.forEach((a, i) => {
  // ID 自动分配 / 校验
  if (!a.id && ENUM.type.includes(a.type)) {
  a.id = nextId(a.type)
+ newIdsAssigned = true
  } else if (a.id) {
  const m = /^([ABCD])-(\d+)$/.exec(a.id)
  if (!m) errors.push(`${tag}: id 格式应为 -NN`)
  else if (a.type && m[1] !== a.type)
  errors.push(`${a.id}: id 前缀 ${m[1]} 与 type ${a.type} 不符`)
  }
- // 证据等级不得超过来源可靠度上限
+ // 强证据必须声明来源（不能凭"我觉得"写 L3+）
  const rel = a.provenance?.reliability
+ if (LRANK[a.evidenceLevel] >= 3 && !rel)
+ errors.push(
+ `${a.id || tag}: evidenceLevel ${a.evidenceLevel} ≥ L3 但缺 provenance.reliability——强证据必须声明来源`,
+ )
+ // 证据等级不得超过来源可靠度上限
  if (rel && a.evidenceLevel && LRANK[a.evidenceLevel] > LRANK[CAP[rel]])
  errors.push(
  `${a.id || tag}: 证据等级 ${a.evidenceLevel} 超过来源 ${rel} 上限 ${CAP[rel]}`,
@@ -99,10 +112,17 @@ data.forEach((a, i) => {
  a.status === "validated" ||
  a.status === "refuted"
  if (strong && !a.provenance?.signedOffBy) needSignoff.push(a.id || tag)
+ // killCriteria 软警告：必须带数字阈值（无数字 = 模糊线，无法校准）
+ if (a.killCriteria && !/\d/.test(a.killCriteria))
+ killWarn.push(a.id || tag)
 })
 
-// 回写自动分配的 ID
-fs.writeFileSync(file, JSON.stringify(data, null, 2) + "\n")
+// 回写自动分配的 ID（仅在实际分配了 ID 且非 --check 模式时）
+if (newIdsAssigned && !checkOnly) {
+ fs.writeFileSync(file, JSON.stringify(data, null, 2) + "\n")
+} else if (newIdsAssigned && checkOnly) {
+ errors.push("存在未分配 ID 的假设，请本地跑无 --check 的版本分配 ID 后再推送")
+}
 
 // —— 论点 thesis.md 分层执法（v1.2）——
 // 扁平标量字段硬失败（schemaVersion/id/needsRevision）；嵌套字段（revisions[]）软警告。
@@ -158,12 +178,23 @@ if (thesisFile !== file && fs.existsSync(thesisFile)) {
  revisionWarn = `未找到 ${thesisFile}——thesis 是北极星，建议尽快创建（跑 /new 或复制 kernel/templates/thesis.md）。`
 }
 
+// —— 承重假设强制（v1.3）：loadBearing=true && status=refuted → thesis.needsRevision 必须为 true ——
+const refutedLoadBearing = data
+ .filter((a) => a.loadBearing === true && a.status === "refuted")
+ .map((a) => a.id)
+if (refutedLoadBearing.length && !thesisNeedsRevision)
+ thesisErrors.push(
+ `承重假设 ${refutedLoadBearing.join(", ")} 已 refuted 但 thesis.needsRevision=false——承重假设被推翻必须触发论点修订（回写契约 §4 循环状态机）`,
+ )
+
 console.log(`\n=== 内核校验: ${file} ===`)
 console.log(
  `假设数: ${data.length} | \ud83d\udd34 裸奔: ${naked.length}${naked.length ? ` [${naked.join(", ")}]` : ""}`,
 )
 if (stale.length)
  console.log(`\u23f3 过期: ${stale.length} [${stale.join(", ")}]`)
+if (killWarn.length)
+ console.warn(`\u26a0\ufe0f  killCriteria 无数字: ${killWarn.length} [${killWarn.join(", ")}] — 模糊线无法校准，建议带具体阈值`)
 if (needSignoff.length)
  console.log(
  `\u270d\ufe0f 待 sign-off: ${needSignoff.length} [${needSignoff.join(", ")}] — 跑 /review 确认`,

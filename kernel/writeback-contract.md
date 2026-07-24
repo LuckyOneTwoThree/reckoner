@@ -26,7 +26,7 @@
 
 ## 3. 证据等级上限（Reliability Cap）
 
-证据等级不能超过来源可靠度——你不能凭“我觉得”写出 L4。
+证据等级不能超过来源可靠度——你不能凭"我觉得"写出 L4。
 
 | provenance.reliability | evidenceLevel 上限 |
 |---|---|
@@ -35,17 +35,21 @@
 | direct（直接观察/访谈） | L3 |
 | data（量化数据） | L4 |
 
-违反由 `tools/validate.mjs` 直接判 **校验失败（exit 1）**。
+**强证据必须声明来源**（v1.3）：`evidenceLevel ≥ L3` 时 `provenance.reliability` 不可为空——不能凭"我觉得"写 L3+。违反由 validator 直接判 **校验失败（exit 1）**。
+
+违反上限由 `tools/validate.mjs` 直接判 **校验失败（exit 1）**。
 
 ## 4. 循环状态机（Loop State Machine）
 
 内核是活的：假设被推翻要反推论点，别让论点静静地错下去。
 
+**承重假设**（v1.3）：agent 在 ledger 标 `loadBearing: true` 表示"错了整个论点就垮"。validator 强制：`loadBearing=true && status=refuted` 时，对应 `thesis.needsRevision` 必须为 `true`，否则 exit 1——把"活的闭环"从口号落成代码。
+
 ```
-假设 status → refuted（且为承重假设）
+承重假设（loadBearing: true）status → refuted
         │
         ▼
-thesis.needsRevision = true   ← 自动置位
+thesis.needsRevision = true   ← validator v1.3 硬性强制
         │
         ▼
 用户修订论点 → 追加 thesis.revisions[]（留痕：at / reason / before / after）
@@ -85,3 +89,5 @@ refuted ──(论点 pivot 后重新成立)──→ todo                  [允
 1. 任何 `ledger.json` 改动，结束时必须 `node tools/validate.mjs` 通过才算完成。
 2. 新假设 `id` 留空，交 validator 按 `<TYPE>-NN` 分配。
 3. 不手写派生字段；不跳过校验直接宣称已更新。
+4. **承重假设必须标 `loadBearing: true`**（v1.3）：错了整个论点就垮的假设，agent 必须在 ledger 标记。validator 强制：承重假设 `refuted` → `thesis.needsRevision=true`。
+5. **强证据必须声明来源**（v1.3）：`evidenceLevel ≥ L3` 时 `provenance.reliability` 不可为空。

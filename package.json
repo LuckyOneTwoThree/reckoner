@@ -5,6 +5,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "test": "node --test",
     "validate:all": "for f in workspace/*/ledger.json; do [ -f \"$f\" ] && node tools/validate.mjs \"$f\"; done",
     "migrate": "node tools/migrate.mjs",
     "lookup": "node tools/lookup.mjs"

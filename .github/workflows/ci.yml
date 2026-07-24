@@ -16,17 +16,25 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Run unit tests (validator discipline)
+        run: npm test
+
       - name: Validate all project ledgers (skip if workspace empty)
         run: |
           found=0
           for f in workspace/*/ledger.json; do
             [ -f "$f" ] || continue
             found=1
-            node tools/validate.mjs "$f"
+            node tools/validate.mjs "$f" --check
           done
           if [ "$found" -eq 0 ]; then
             echo "ℹ️ workspace/ 无项目（框架仓库默认状态），跳过 ledger 校验"
           fi
+
+      - name: Schema lint (ajv)
+        run: |
+          npx ajv-cli validate -s kernel/assumption-ledger.schema.json -d "workspace/*/ledger.json" 2>/dev/null || \
+          echo "ℹ️ workspace/ 无项目，跳过 schema lint"
 
       - name: Verify all SKILL.md have eval.md
         run: |

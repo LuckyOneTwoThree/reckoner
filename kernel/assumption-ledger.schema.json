@@ -19,6 +19,7 @@
       },
       "statement": { "type": "string" },
       "impact": { "type": "string", "enum": ["high", "med", "low"] },
+      "loadBearing": { "type": "boolean", "default": false, "description": "承重假设：错了整个论点就垮。agent 标记，validator 强制 refuted→thesis.needsRevision" },
       "evidenceLevel": {
         "type": "string",
         "enum": ["L1", "L2", "L3", "L4"],

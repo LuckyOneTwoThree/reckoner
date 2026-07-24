@@ -52,7 +52,7 @@
 |---|---|
 | `kernel/personal/` 跨项目学习层 | 用户跑到第 2 个项目且明确想复用上个项目的教训 |
 | OST（机会解决方案树） | 单项目假设 > ~20 条、需要结构化组织时 |
-| decision-log + /retro + 校准闭环 | 已有 ≥5 条 validated/refuted、可回溯校准准确率时 |
+| decision-log schema | 已有 ≥5 条 validated/refuted、可回溯校准准确率时（注：/retro + /lookup 已下移 P0，仅 decision-log schema 推迟） |
 | MIGRATIONS.md | schemaVersion 需要第一次升级时 |
 | /discover 编排链 | 单个 skill 已被反复串用、值得固化流程时 |
 | vitals 仪表盘 / Web app（Phase 2） | 内核数据稳定、需要可视化留存时 |

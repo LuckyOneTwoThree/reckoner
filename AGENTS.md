@@ -70,6 +70,7 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 7. **多项目隔离**：动手前先回显 `当前项目: workspace/<project>/` 并确认；只动这个目录，ID 项目内编号，别跨项目串写。**同一会话只做一个项目**——检测到切换项目时，先提示用户开新会话或显式确认再继续（上下文串味是文件隔离堵不住的漏）。
 8. **跟着 validator 的下一步提示走**：校验通过后，validator 会打印 `👉 下一步` 启发式（有裸奔→@experiment-design/@evidence-intake；needsRevision→@revise-thesis；待 sign-off→/review；全清→/decide）。这是回路接力的显式提示，别无视它另起方案。
 9. **workspace/ 是 runtime，不入库**：本仓库是框架（kernel/skills/commands/tools/docs），不托管用户项目数据。`workspace/<project>/` 下的 thesis.md / ledger.json / decisions.md / sources/ 都是用户跑回路产生的 runtime 状态，由 `.gitignore` 排除。改完台账后该 commit 的是框架代码与文档，**用户的 workspace 数据由用户自行保管**（本地保留或另起私有仓库存 dogfooding 数据）。
+10. **承重假设必须标 `loadBearing: true`**（v1.3）：错了整个论点就垮的假设，agent 在写假设时必须判断并标记 `loadBearing`。validator 强制：`loadBearing=true && status=refuted` 时对应 `thesis.needsRevision` 必须为 `true`，否则 exit 1——把"活的闭环"从口号落成代码。
 
 ## 环境差异
 
