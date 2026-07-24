@@ -1,9 +1,9 @@
-# playbook · 项目设计方案与交接文档（Master Plan v1.1）
+# Reckoner · 项目设计方案与交接文档（Master Plan v1.1）
 
-> **本文件是 playbook 项目的唯一设计事实源（Single Source of Truth）。**
+> **本文件是 诤 项目的唯一设计事实源（Single Source of Truth）。**
 > 切换对话 / 新会话开始前，请先完整阅读本文件再继续工作，以保证设计不漂移。
 > 任何与本文件冲突的新想法：先更新本文件，再动手。
-> 代码事实源为 GitHub 仓库 <https://github.com/LuckyOneTwoThree/pm-playbook>；本文件为设计事实源。
+> 代码事实源为 GitHub 仓库 <https://github.com/LuckyOneTwoThree/reckoner>；本文件为设计事实源。
 
 ---
 
@@ -21,9 +21,9 @@
 
 > 给主观、可刷、易自欺的产品决策，装一个**会顶嘴、有记忆**的决策内核。
 
-**电梯陈述**：playbook 是一个跑在 Claude Code / Cowork / Codex 上的 PM skill 插件包 + 决策内核。和普通 PM 助手最大的不同：每个 skill 跑完都把结论**回写内核**（假设台账 + 论点），跨会话记住你的假设、证据与到期项。它不是无状态的文档生成器，是一个会积累的**决策 OS**。
+**电梯陈述**：诤 是一个跑在 Claude Code / Cowork / Codex 上的 PM skill 插件包 + 决策内核。和普通 PM 助手最大的不同：每个 skill 跑完都把结论**回写内核**（假设台账 + 论点），跨会话记住你的假设、证据与到期项。它不是无状态的文档生成器，是一个会积累的**决策 OS**。
 
-- **项目名 / 仓库名**：仓库名 `pm-playbook`（GitHub: <https://github.com/LuckyOneTwoThree/pm-playbook>）；`playbook` 保留为产品代号 / 正文品牌名；「PM Superpower」保留为产品理念代号 / 副标题。
+- **项目名 / 仓库名**：仓库名 `reckoner`（GitHub: <https://github.com/LuckyOneTwoThree/reckoner>）；`Reckoner` / `诤` 为品牌名（英文 Reckoner / 中文 诤）；「会顶嘴、有记忆的决策内核」定为产品口号。
 - **产品对象**：PM / 产品负责人，从 0→1 的想法阶段，到设计产出。
 - **买单方**：个人自费、个人使用（当前阶段）。
 - **核心钩子—留存—护城河**：照妖镜（钩子）→ 决策内核（留存）→ 跨项目校准（护城河，Phase 1.5）。
@@ -38,7 +38,7 @@
 - 倾向附和（谄媚），不会真的顶你。
 - 结论散落在文档里，无法积累成可复用的判断资产。
 
-playbook 用「会顶嘴 + 有记忆」的内核直击这三点。
+诤 用「会顶嘴 + 有记忆」的内核直击这三点。
 
 ---
 
@@ -71,7 +71,7 @@ playbook 用「会顶嘴 + 有记忆」的内核直击这三点。
 ## 5. 系统架构总览
 
 ```
-playbook/
+reckoner/
 ├─ README.md · AGENTS.md · CLAUDE.md   # 说明 + agent 操作约定
 ├─ .claude-plugin/marketplace.json     # 插件清单
 ├─ kernel/                             # 决策内核：数据模型 + 契约（真 IP）
@@ -223,7 +223,7 @@ needsRevision 复位 false
 
 ### 12.1 已产出的软件框架（P0 仓库，可跑）
 
-已发布到 GitHub：<https://github.com/LuckyOneTwoThree/pm-playbook>
+已发布到 GitHub：<https://github.com/LuckyOneTwoThree/reckoner>
 
 - [x] 仓库骨架：README / AGENTS.md / CLAUDE.md / .claude-plugin/marketplace.json / docs/ARCHITECTURE.md
 - [x] kernel：thesis.schema.json、assumption-ledger.schema.json、writeback-contract.md、templates/thesis.md
@@ -239,7 +239,7 @@ needsRevision 复位 false
 
 ### 12.3 事实源约定
 
-- **代码事实源**：GitHub 仓库 <https://github.com/LuckyOneTwoThree/pm-playbook>（跨会话唯一可信代码源）。
+- **代码事实源**：GitHub 仓库 <https://github.com/LuckyOneTwoThree/reckoner>（跨会话唯一可信代码源）。
 - **设计事实源**：本文件（`docs/PROJECT-PLAN.md`）+ Notion Master Plan 页面。
 - 注意脚本沙箱在对话轮次之间会重置，一切代码改动以 GitHub 仓库为准。
 
@@ -251,14 +251,14 @@ needsRevision 复位 false
 
 **A. 命名与文档同步（优先）**
 
-- [x] 统一项目命名为 `playbook`：README / AGENTS / marketplace.json 全部对齐（保留「PM Superpower」作产品理念副标题）。
+- [x] 统一项目命名为 `Reckoner`/`诤`：README / AGENTS / marketplace.json 全部对齐（口号定为「会顶嘴、有记忆的决策内核」）。
 - [x] 把 Master Plan 同步为仓库内 `docs/PROJECT-PLAN.md`（本文件），README 目录树补上该条目。
 - [x] 事实源对齐：marketplace.json / README / CLAUDE.md / ARCHITECTURE.md / 本文件 全部同步到 6 skill + 4 命令的回路闭合定义（v1.2）。
 
 **B. 实测与打磨**
 
 - [ ] 在 Cowork / Codex 里实测整条冷启动（/new → 填 thesis → 照妖镜 → experiment-design → evidence → review → decide），并回填实测结果。
-- [ ] **第 0 位：playbook 自身 A/B 验证**——找 3 个 PM 真实跑一遍，量是否回来第二次。这是项目自身的承重假设，比引擎打磨更优先。
+- [ ] **第 0 位：诤 自身 A/B 验证**——找 3 个 PM 真实跑一遍，量是否回来第二次。这是项目自身的承重假设，比引擎打磨更优先。
 - [ ] 把 6 个 SKILL 的措辞对照方法论「决策内核」「Agent 工作流」两页做一次「接地」打磨（当前用通用内核词汇）。
 
 **C. 工程化完善（可选，提升可维护性）**
@@ -312,5 +312,5 @@ needsRevision 复位 false
 | 版本 | 日期 | 变更 |
 | --- | --- | --- |
 | Master Plan v1 | 2026-07-23 | 首次成文：锁定 P0 精简架构、四 skill、内核契约、agent 集成、决策记录与路线图。 |
-| Master Plan v1.1 | 2026-07-23 | 对齐 GitHub P0 现状：统一项目名 playbook、代码事实源改为 GitHub 仓库、细化 P0 收尾路线为 A/B/C（命名同步 / PROJECT-PLAN 回流 / 端到端实测 / 工程化完善）。 |
+| Master Plan v1.1 | 2026-07-23 | 对齐 GitHub P0 现状：统一项目名 Reckoner/诤、代码事实源改为 GitHub 仓库、细化 P0 收尾路线为 A/B/C（命名同步 / PROJECT-PLAN 回流 / 端到端实测 / 工程化完善）。 |
 | Master Plan v1.2 | 2026-07-23 | 闭环回路补齐：新增 @experiment-design（实验规格）/ @revise-thesis（论点修订）/ /decide（go·pivot·kill 决策日志）/ /list（多项目只读列举）。validator 升级为分层执法（thesis 扁平字段硬失败、嵌套软警告、frontmatter 锚定）+ 启发式下一步提示。3 个配角 skill 补 stub eval.md。事实源全量对齐到 6 skill / 4 命令。ADR 补记 /list、/decide 为 P0 应用户请求补充件（不入内核 schema、不经 validate）。 |

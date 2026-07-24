@@ -1,6 +1,6 @@
 <div align="center">
 
-# playbook
+# Reckoner
 
 **会顶嘴、有记忆的决策内核**
 
@@ -10,7 +10,7 @@
 [![Skills](https://img.shields.io/badge/skills-6-green)]()
 [![Commands](https://img.shields.io/badge/commands-6-green)]()
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
-[![GitHub](https://img.shields.io/badge/repo-pm--playbook-black?logo=github)](https://github.com/LuckyOneTwoThree/pm-playbook)
+[![GitHub](https://img.shields.io/badge/repo-reckoner-black?logo=github)](https://github.com/LuckyOneTwoThree/reckoner)
 
 </div>
 
@@ -21,9 +21,9 @@
 
 ## 为什么
 
-产品决策天然主观、容易被自己「刷」出信心、容易自欺。现有 AI PM 助手大多是**无状态文档生成器**，playbook 正面直击三大反模式：
+产品决策天然主观、容易被自己「刷」出信心、容易自欺。现有 AI PM 助手大多是**无状态文档生成器**，诤 正面直击三大反模式：
 
-| 反模式 | playbook 的解法 |
+| 反模式 | 诤 的解法 |
 | --- | --- |
 | 每次对话从零开始，不记得上次的假设和证据 | **有记忆** — 结论回写内核，跨会话留存 |
 | 倾向附和（谄媚），不会真的顶你 | **会顶嘴** — 默认「风险是真的」，先 steelman 再攻击 |
@@ -144,7 +144,7 @@ node tools/validate.mjs workspace/<项目名>/ledger.json
 ## 目录结构
 
 ```
-playbook/
+reckoner/
 ├─ README.md
 ├─ AGENTS.md                    # agent 操作约定（Codex 约定读）
 ├─ CLAUDE.md                    # 指向 AGENTS.md（Claude Code 约定读）
@@ -241,6 +241,6 @@ playbook/
 
 <div align="center">
 
-<sub>playbook · 决策 OS for PM</sub>
+<sub>Reckoner · 会顶嘴的决策内核</sub>
 
 </div>
