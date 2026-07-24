@@ -19,7 +19,10 @@ description: "一键初始化一个新项目工作区：生成 thesis.md（论�
    - `ledger.json` — 空台账 `[]`
    - `sources/` — 证据原文目录
 3. 若目录已存在，脚本会报错;确认要覆盖时加 `--force`。
-4. 引导用户打开 `workspace/<项目名>/thesis.md` 填写六格，然后 `@assumption-xray` 开跑。
+4. 引导用户打开 `workspace/<项目名>/thesis.md` 填写六格。填完：
+   - 若 thesis 第6格「最致命假设」已带种子假设 → 直接 `@assumption-xray` 红队。
+   - 若需补 A/B/C 假设面（已有访谈/竞品数据）→ 先跑 `@user-insight` / `@competitor-teardown` 丰富证据，再进红队。
+   - 入料口为可选增强，非必经——xray 自己也会归类 A/B/C/D。
 
 ## 说明
 

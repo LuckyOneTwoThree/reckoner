@@ -3,7 +3,7 @@
 > **本文件是 playbook 项目的唯一设计事实源（Single Source of Truth）。**
 > 切换对话 / 新会话开始前，请先完整阅读本文件再继续工作，以保证设计不漂移。
 > 任何与本文件冲突的新想法：先更新本文件，再动手。
-> 代码事实源为 GitHub 仓库 <https://github.com/LuckyOneTwoThree/playbook>；本文件为设计事实源。
+> 代码事实源为 GitHub 仓库 <https://github.com/LuckyOneTwoThree/pm-playbook>；本文件为设计事实源。
 
 ---
 
@@ -23,7 +23,7 @@
 
 **电梯陈述**：playbook 是一个跑在 Claude Code / Cowork / Codex 上的 PM skill 插件包 + 决策内核。和普通 PM 助手最大的不同：每个 skill 跑完都把结论**回写内核**（假设台账 + 论点），跨会话记住你的假设、证据与到期项。它不是无状态的文档生成器，是一个会积累的**决策 OS**。
 
-- **项目名 / 仓库名**：`playbook`（GitHub: <https://github.com/LuckyOneTwoThree/playbook>）；「PM Superpower」保留为产品理念代号 / 副标题。
+- **项目名 / 仓库名**：仓库名 `pm-playbook`（GitHub: <https://github.com/LuckyOneTwoThree/pm-playbook>）；`playbook` 保留为产品代号 / 正文品牌名；「PM Superpower」保留为产品理念代号 / 副标题。
 - **产品对象**：PM / 产品负责人，从 0→1 的想法阶段，到设计产出。
 - **买单方**：个人自费、个人使用（当前阶段）。
 - **核心钩子—留存—护城河**：照妖镜（钩子）→ 决策内核（留存）→ 跨项目校准（护城河，Phase 1.5）。
@@ -163,7 +163,7 @@ needsRevision 复位 false
 | ⚔️ competitor-teardown | `@competitor-teardown <竞品>` | thesis | ledger | 竞品矩阵（含「现状凑合方案」）+ 市场缺口 → B/C 类假设 |
 | 📥 evidence-intake | `@evidence-intake <证据>` | ledger, thesis | ledger, thesis | 归档 sources/ + 升 / 降级台账 + 触发反驳循环 |
 
-每个 `SKILL.md` 结构：frontmatter（name/description/reads/writes/eval）+ Purpose / Context / Instructions / Output（screenshot-native）/ Kernel Write-back / Notes。
+每个 `SKILL.md` 结构：frontmatter（顶层 `name`/`description` + `metadata` 块下 `reads`/`writes`/`eval`）+ Purpose / Context / Instructions / Output（screenshot-native）/ Kernel Write-back / Notes。
 
 **照妖镜 5 条 eval**：①有用性 ②改变决策（最关键）③点名裸奔 ④不谄媚 ⑤回访（每条带可证伪出路）。
 
@@ -223,7 +223,7 @@ needsRevision 复位 false
 
 ### 12.1 已产出的软件框架（P0 仓库，可跑）
 
-已发布到 GitHub：<https://github.com/LuckyOneTwoThree/playbook>
+已发布到 GitHub：<https://github.com/LuckyOneTwoThree/pm-playbook>
 
 - [x] 仓库骨架：README / AGENTS.md / CLAUDE.md / .claude-plugin/marketplace.json / docs/ARCHITECTURE.md
 - [x] kernel：thesis.schema.json、assumption-ledger.schema.json、writeback-contract.md、templates/thesis.md
@@ -240,7 +240,7 @@ needsRevision 复位 false
 
 ### 12.3 事实源约定
 
-- **代码事实源**：GitHub 仓库 <https://github.com/LuckyOneTwoThree/playbook>（跨会话唯一可信代码源）。
+- **代码事实源**：GitHub 仓库 <https://github.com/LuckyOneTwoThree/pm-playbook>（跨会话唯一可信代码源）。
 - **设计事实源**：本文件（`docs/PROJECT-PLAN.md`）+ Notion Master Plan 页面。
 - 注意脚本沙箱在对话轮次之间会重置，一切代码改动以 GitHub 仓库为准。
 

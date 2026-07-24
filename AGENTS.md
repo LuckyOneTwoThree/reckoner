@@ -17,8 +17,8 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 
 ```
 /new 填 thesis
-   → @user-insight / @competitor-teardown   （产出 A / B·C 类假设）
    → @assumption-xray                        （红队：点名裸奔 + 每条最便宜验证）
+   ↑ 若已有访谈/竞品数据，可先跑 @user-insight / @competitor-teardown 丰富 A/B·C 证据面（可选增强，非必经）
    → @experiment-design                       （cheapest test → 可追踪实验规格，status→testing）
    → 跑实验
    → @evidence-intake                        （落回台账：升级 / 反驳）
@@ -26,6 +26,8 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
    → /decide                                  （go / pivot / kill + 理由，写 decisions.md）
    → 若承重假设被反驳 / 决定 pivot → @revise-thesis（结构化修订论点，闭合循环）
 ```
+
+> **入料口定位**：@user-insight / @competitor-teardown 是**可选增强**而非必经——thesis 第6格「最致命假设」自带种子假设时可直接 @assumption-xray 红队（ADR #7 standalone-first）。入料口价值在于把 self/L1 证据拉高到 direct/L3，不是「不跑就没 A/B/C 类假设」（xray 自己也会归类 A/B/C/D）。
 
 **任何 skill 收尾时，“下一步”只能指向回路里的下一个节点，不能跳到方案 / MVP / 原型 / 排期。** 造东西是回路之外的事，前提是承重假设已经过红队 + sign-off。
 
@@ -35,7 +37,7 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
  - `thesis.schema.json` / `assumption-ledger.schema.json` — 结构，回写必须符合。
  - `writeback-contract.md` — 回写规范、分级 sign-off、循环状态机。**动内核前必读。**
  - `templates/thesis.md` — 论点模板。
-- `skills/<name>/SKILL.md` — 原子能力，含 frontmatter（name/description/reads/writes/eval）。触发某能力时**先读对应 SKILL.md 再执行**。
+- `skills/<name>/SKILL.md` — 原子能力，含 frontmatter（顶层 `name`/`description` + `metadata` 块下 `reads`/`writes`/`eval`）。触发某能力时**先读对应 SKILL.md 再执行**。
 - `commands/*.md` — 斜杠命令流程（`/new`、`/list`、`/review`、`/decide`）。
 - `tools/*.mjs` — 零依赖 node 脚本（`new-project.mjs`、`validate.mjs`）。
 - `workspace/<project>/` — 每个项目一个隔离文件夹（`thesis.md` + `ledger.json` + `sources/`）。
@@ -44,7 +46,7 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 
 | 用户意图 | 触发 | 你要做的 | 回路下一站 |
 |---|---|---|---|
-| 新建项目 | `/new` 或 “建个项目 X” | 跑 `node tools/new-project.mjs <name>`，引导填 `thesis.md` | @user-insight / @competitor-teardown |
+| 新建项目 | `/new` 或 “建个项目 X” | 跑 `node tools/new-project.mjs <name>`，引导填 `thesis.md` | @assumption-xray（或先跑 @user-insight / @competitor-teardown 丰富证据面）|
 | 列出/切换项目、忘了项目名 | `/list` | 读 `commands/list.md`，列出所有项目+一句话论点，先挑对项目 | 回显当前项目路径后进回路 |
 | 压力测试想法 / 挑战假设 / 备评审 | `@assumption-xray` | 读 SKILL.md，输出红队表，回写台账 | @experiment-design → @evidence-intake |
 | 设计验证实验 / 把“该测什么”变“怎么测” | `@experiment-design` | 读 SKILL.md，把裸奔假设的最便宜验证写成实验规格，status→testing | 跑实验 → @evidence-intake |

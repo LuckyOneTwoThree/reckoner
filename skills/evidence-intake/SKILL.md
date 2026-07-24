@@ -37,7 +37,7 @@ metadata:
  - 反驳 → `status→refuted`，触发回写契约的循环状态机。
 5. 更新 `provenance.source` 指向归档文件，刷新 `freshness.lastVerified`。
 6. `≥L3` 或状态终局改动挂“待 sign-off”，交 `/review`。
-7. **收尾盘点回路状态**：明确指出台账里**还剩哪些裸奔承重假设未测**，下一步 = 继续跑它们的最便宜验证（或回 `@assumption-xray`）；若论点被反驳，下一步 = 修订 thesis。
+7. **收尾盘点回路状态**：明确指出台账里**还剩哪些裸奔承重假设未测**，下一步 = `@experiment-design` 把下一条裸奔的最便宜验证落成规格（或回 `@assumption-xray` 复盘红队面）；若论点被反驳，下一步 = 修订 thesis。
 
 ## Output
 
@@ -55,7 +55,7 @@ metadata:
 [关联 thesis 是否需 needsRevision，修订建议]
 
 ### 下一步（回路内）
-剩余裸奔假设: [列出未测的承重假设] → 继续最便宜验证 / 修订论点
+剩余裸奔假设: [列出未测的承重假设] → @experiment-design 落规格 / 修订论点（若被反驳）
 ```
 
 ## Kernel Write-back

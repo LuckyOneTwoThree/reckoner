@@ -57,7 +57,7 @@ metadata:
 
 - 只写 thesis：改字段 + append `revisions[]` + `needsRevision → false`。**不新增 schema 外字段**（thesis `additionalProperties:false`）。
 - 保持 `schemaVersion: "4.0"`、`id` 不变。
-- 改完跑 `node tools/validate.mjs workspace/<项目>/ledger.json`：确认留痕软检查通过（needsRevision 已复位、revisions 有条目，不再报 ⚠️ 提醒）。
+- 改完跑 `node tools/validate.mjs workspace/<项目>/ledger.json`（validate 接 ledger 路径但连带校验同目录 thesis.md）：确认留痕软检查通过（needsRevision 已复位、revisions 有条目，不再报 ⚠️ 提醒）。
 
 ## Notes
 

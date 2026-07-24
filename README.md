@@ -10,7 +10,7 @@
 [![Skills](https://img.shields.io/badge/skills-6-green)]()
 [![Commands](https://img.shields.io/badge/commands-4-green)]()
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
-[![GitHub](https://img.shields.io/badge/repo-playbook-black?logo=github)](https://github.com/LuckyOneTwoThree/playbook)
+[![GitHub](https://img.shields.io/badge/repo-pm--playbook-black?logo=github)](https://github.com/LuckyOneTwoThree/pm-playbook)
 
 </div>
 
@@ -231,7 +231,7 @@ playbook/
 - **对 `thesis.md` 分层执法** — 扁平标量字段（`schemaVersion="4.0"` / `id=T-NN` / `needsRevision=bool`）**硬失败 exit 1**；嵌套字段（`revisions[]`）软警告
 - **启发式下一步提示** — 校验通过后打印 `👉 下一步`（有裸奔→`@experiment-design`/`@evidence-intake`；`needsRevision`→`@revise-thesis`；待 sign-off→`/review`；全清→`/decide`）
 
-**eval 纪律** — assumption-xray / experiment-design / revise-thesis 各有 5 条 eval；user-insight / competitor-teardown / evidence-intake 为 stub（触发条件未到，精简不镀金）。
+**eval 纪律** — 6 个 skill 各有 5 条 eval（含 ✅/❌ 对照 + 标"最关键"条），覆盖入料口、红队关口、实验设计、收口、闭合全回路节点。
 
 ---
 

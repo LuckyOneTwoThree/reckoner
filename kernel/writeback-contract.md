@@ -54,7 +54,7 @@ thesis.needsRevision = true   ← 自动置位
 needsRevision 复位 false
 ```
 
-影响等级从非 high 升到 high、或裸奔假设被验证/推翻，同样触发上面的复查。
+「影响等级升 high」「裸奔被验证/推翻」都已被现有机制接住，无需独立扫描：前者由 validator 现算 `isNaked`（§5）→ 启发式路由到 `@experiment-design`；后者由状态机（§4.1）→ `sign-off` / `needsRevision`。跑 `validate.mjs` 即自动接住。
 
 ### 4.1 合法状态转移图（v1.2 显式列出）
 

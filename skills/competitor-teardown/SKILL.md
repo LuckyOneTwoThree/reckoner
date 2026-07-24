@@ -51,7 +51,7 @@ metadata:
 [需要亲自试用/数据才能确认的空白]
 
 ### 下一步（回路内）
-交给 @assumption-xray 红队 B/C 类假设（或 @evidence-intake 补试用证据）
+交给 @assumption-xray 红队 B/C 类假设（亲自试用证据已有时可一并带入红队）
 ```
 
 ## Kernel Write-back

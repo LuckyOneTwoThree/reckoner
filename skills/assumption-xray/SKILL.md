@@ -19,7 +19,7 @@ metadata:
 - 内核词汇：四类假设 **A 用户价值 / B 商业可行 / C 技术可行 / D 安全合规**；证据等级 **L1 只是觉得 / L2 间接信号 / L3 直接证据 / L4 数据验证**。
 - **裸奔假设 = 影响高 × 证据弱。**
 - 红队不是事后复盘（pre-mortem）：它**现在**攻击承重假设与逻辑，趁最便宜的那条还来得及测。它改进的是判断，不只是信心。
-- **内核回路位置**：本 skill 是回路的**红队关口**。上游是 thesis / user-insight / competitor-teardown 提出的假设，下游是“跑最便宜验证 → `@evidence-intake` 落回台账”。你的产出是“每条裸奔假设 + 最便宜证伪”，不是“造什么”。
+- **内核回路位置**：本 skill 是回路的**红队关口**。上游是 thesis / user-insight / competitor-teardown 提出的假设，下游是 `@experiment-design`（把最便宜验证落成实验规格）→ 跑实验 → `@evidence-intake` 落回台账。你的产出是“每条裸奔假设 + 最便宜证伪”，不是“造什么”。
 
 ## Instructions
 
@@ -76,7 +76,7 @@ metadata:
 [计划没给足信息的空白]
 
 ### 下一步（回路内）
-选排第一的裸奔假设 → 跑它的最便宜验证 → @evidence-intake 落回台账
+选排第一的裸奔假设 → @experiment-design 把最便宜验证落成实验规格 → 跑实验 → @evidence-intake 落回台账
 ```
 
 ## Kernel Write-back
@@ -84,7 +84,7 @@ metadata:
 - 每条假设按 `assumption-ledger.schema.json` 映射，`status: todo`，`id` 留空交 validator 分配。
 - `evidenceLevel` 仅建议，且 ≤ `provenance.reliability` 上限。
 - `≥L3` 或 `status→validated/refuted` 需 `/review` sign-off，否则自动落库。
-- 若某承重假设 `status→refuted`：给关联 `thesis.needsRevision = true` 并提示修订。
+- （引用契约，非本 skill 动作）后续若某承重假设被 `@evidence-intake` 标 `status→refuted`，将触发 `thesis.needsRevision = true` 并提示修订——本 skill 只产 `status:todo`，不改终局状态。
 - 落库前跑 `node tools/validate.mjs workspace/<项目>/ledger.json`。
 
 ## Notes
