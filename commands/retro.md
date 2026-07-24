@@ -49,7 +49,7 @@ description: "复盘历史决策的假设校准。读 decisions.md + git-SHA 快
 
 ## 说明
 
-- **过程校准 ≠ 结果校准**：/retro 校准的是"假设→证据的判断链质量"（验证速度够不够快、kill 标准够不够硬），**不是"产品决策对了没"**（诤 不收集上线后数据，无法回答这个）。
+- **过程校准 ≠ 结果校准**：/retro 校准的是"假设→证据的判断链质量"（验证速度够不够快、kill 标准够不够硬），**不是"产品决策对了没"**（Reckoner 不收集上线后数据，无法回答这个）。
 - **kill 标准依赖**：/retro 的校准信号质量上游依赖 xray 的 killCriteria 是否带数字阈值。模糊 kill 标准（"反馈不好"）= 噪声，如实标注。
 - **git-SHA 是地基**：/decide 时留的 SHA 是 /retro 取回"当时假设分布"的唯一途径。没留 SHA 的决策无法校准——这正是 /decide 第 5 步强制 commit + 填 SHA 的理由。
 - **不入内核 schema**：/retro 只读不写，不改 ledger.json/thesis.md，不经 validate.mjs。产出是报告，不是回写。

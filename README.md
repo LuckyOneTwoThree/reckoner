@@ -6,28 +6,146 @@
 
 给主观、可刷、易自欺的产品决策，装一个不附和、会积累的决策 OS。
 
-[![P0](https://img.shields.io/badge/stage-P0-blue)]()
-[![Skills](https://img.shields.io/badge/skills-6-green)]()
-[![Commands](https://img.shields.io/badge/commands-6-green)]()
-[![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
+[![CI](https://github.com/LuckyOneTwoThree/reckoner/actions/workflows/ci.yml/badge.svg)](https://github.com/LuckyOneTwoThree/reckoner/actions/workflows/ci.yml)
+[![Skills](https://img.shields.io/badge/skills-6-green)](https://github.com/LuckyOneTwoThree/reckoner)
+[![Commands](https://img.shields.io/badge/commands-6-green)](https://github.com/LuckyOneTwoThree/reckoner)
+[![License](https://img.shields.io/badge/license-MIT-lightgrey)](https://github.com/LuckyOneTwoThree/reckoner)
 [![GitHub](https://img.shields.io/badge/repo-reckoner-black?logo=github)](https://github.com/LuckyOneTwoThree/reckoner)
 
 </div>
 
 ---
 
-> 照妖镜是钩子，内核是留存，跨项目校准是护城河。
-> 它不是无状态的文档生成器，是一个会积累的决策 OS。
+> 不是又一个无状态文档生成器，而是一个会积累、会顶嘴的决策 OS。
+> 照妖镜（assumption-xray）只是入口；真正留住你的是内核与跨项目校准。
+
+<details>
+<summary>English TL;DR</summary>
+
+**Reckoner** is a decision OS for product managers that refuses to flatter you. Every skill run writes its conclusions back into a durable kernel (`thesis` + `assumption-ledger`), so your assumptions, evidence, and expiry dates survive across sessions. It red-teams your ideas (the "照妖镜 / assumption-xray" skill), designs the cheapest possible test, ingests evidence, and forces a sign-off before any build decision. Deterministic scripts (`validate.mjs`) enforce schema and trust ceilings; the LLM only judges. 6 skills, 6 commands, schema-hard-validated memory.
+
+</details>
 
 ## 为什么
 
-产品决策天然主观、容易被自己「刷」出信心、容易自欺。现有 AI PM 助手大多是**无状态文档生成器**，诤 正面直击三大反模式：
+产品决策天然主观、容易被自己「刷」出信心、容易自欺。现有 AI PM 助手大多是**无状态文档生成器**，Reckoner 正面直击三大反模式：
 
-| 反模式 | 诤 的解法 |
+| 反模式 | Reckoner 的解法 |
 | --- | --- |
 | 每次对话从零开始，不记得上次的假设和证据 | **有记忆** — 结论回写内核，跨会话留存 |
 | 倾向附和（谄媚），不会真的顶你 | **会顶嘴** — 默认「风险是真的」，先 steelman 再攻击 |
 | 结论散落在文档里，无法积累成判断资产 | **可追溯** — 假设-证据-决策显式化为链路 |
+
+## 30 秒感受一下：照妖镜怎么顶你
+
+**你说**：「做个 AI 记账 App，主打自动分类，大家都嫌手动记账烦。」
+
+**Reckoner 顶回来**：
+
+🩲 **裸奔假设 A-01**（影响高 × 证据 L1）
+　用户愿意为"自动分类"授权银行数据、放弃手动掌控感
+　├ Fails if：访谈 10 人 <3 人愿意连银行卡
+　├ 最便宜验证：5 人看假界面问"你会连吗"（0 成本 / 1 天）
+　└ kill 标准：连接意愿 <30% → 整个方向重估
+
+⚔️ **最致命追问**
+　分类准确率只有 80% 时，用户觉得"省事"还是"更不放心"？
+　—— 这决定了你是提效工具还是焦虑放大器。
+
+> 这一块的转化力超过后面所有架构表格的总和：把「会顶嘴 / 裸奔 / cheapest test / kill 标准」一次性变成你能感受到的真实价值。
+
+## 决策回路
+
+```mermaid
+flowchart LR
+    A["💡 想法 / 论点"] --> U["👤 user-insight<br>⚔️ competitor-teardown<br>入料口：产 A / B·C 类假设"]
+    U --> B["🔍 assumption-xray<br>照妖镜：红队 + 点名裸奔"]
+    B --> C["🧪 experiment-design<br>实验设计：cheapest test → 规格"]
+    C --> D["📥 evidence-intake<br>证据采集：落回台账"]
+    D --> E["✅ /review<br>批量 sign-off"]
+    E --> F["⚖️ /decide<br>go / pivot / kill"]
+    F -->|pivot| G["✏️ revise-thesis<br>论点修订"]
+    G --> B
+    F -->|go| H["🚀 进入交付"]
+    F -->|kill| I["🗑 终止并留痕"]
+```
+
+> **回路外产出**：`/decide go` 之后才允许进入交付（造产品 / 写 PRD / 排期）。这些产出属"回路外补充件"，写入 `workspace/<项目>/artifacts/`（约定见 AGENTS.md），**不入内核 schema、不经 validate**——和 `decisions.md` 同级逻辑。
+
+## 安装
+
+```bash
+# 1. 拉取仓库
+git clone https://github.com/LuckyOneTwoThree/reckoner.git
+cd reckoner
+```
+
+- **Claude Code / Cowork**：`skills/` 与 `/命令` 原生自动发现，直接 `@assumption-xray` / `/new`；也可作为 Claude 插件按 `.claude-plugin/marketplace.json` 接入。
+- **Codex**：在对话里说「读 AGENTS.md 建立上下文」，skill 通过读对应 `SKILL.md` 执行，脚本通过 shell 跑。
+- **前置**：Node ≥ 20（仅 `tools/*.mjs` 与 `node --test` 需要）。
+
+## 快速开始
+
+> 在 agent 工具里你**说人话就行**，下面的命令是 agent 替你跑的（也可手动跑）。
+
+```bash
+# 2. 新建项目
+node tools/new-project.mjs <项目名>      # 或在 agent 里 /new
+# → 自动生成 workspace/<项目名>/{thesis.md, ledger.json, sources/}
+
+# 3. 打开 thesis.md 填写六格论点
+# 4. 召唤照妖镜
+@assumption-xray <你的想法或论点>
+
+# 5. 设计实验
+@experiment-design                       # 把最便宜验证落成可追踪实验规格, status→testing
+
+# 6. 跑完实验 → 采集证据
+@evidence-intake <访谈 / 竞品 / 数据 / 链接>
+
+# 7. 每周批量确认强声明
+/review
+
+# 8. 收口决策
+/decide                                  # go / pivot / kill; pivot → @revise-thesis
+
+# 9. 校验内核
+node tools/validate.mjs workspace/<项目名>/ledger.json
+# validator 会提示下一步该跑哪个 skill
+```
+
+## 能力清单
+
+> 注：**照妖镜** 是 `assumption-xray` 这一个 skill 的昵称，仅在该 skill 语境下使用。
+
+### Skills
+
+| Skill | 触发 | 主要产出 |
+| --- | --- | --- |
+| **assumption-xray**（昵称：照妖镜，主角） | `@assumption-xray <想法>` | A/B/C/D 拆解 + 裸奔排序 + 最致命追问 + 每条 Fails if / 最便宜验证 / kill 标准 |
+| **user-insight** | `@user-insight <访谈/反馈>` | 2–4 个洞察主题 + 可证伪 A 类假设 |
+| **competitor-teardown** | `@competitor-teardown <竞品>` | 竞品矩阵（含「现状凑合方案」）+ 市场缺口 → B/C 类假设 |
+| **evidence-intake** | `@evidence-intake <证据>` | 归档 sources/ + 升降级台账 + 触发反驳循环 |
+| **experiment-design** | `@experiment-design` | 把最便宜验证落成可追踪实验规格，`status → testing` |
+| **revise-thesis** | `@revise-thesis` | 结构化修订论点，追加 `thesis.revisions[]`，闭合循环 |
+
+### Commands
+
+| 命令 | 作用 |
+| --- | --- |
+| `/new` | 一键初始化项目（slug 化命名 + 重名保护） |
+| `/list` | 列出所有项目 + 各自裸奔假设数 / 待 sign-off 数 |
+| `/review` | 批量 sign-off（扫描 ≥L3 或状态终局且未签字项） |
+| `/decide` | go / pivot / kill 决策日志（写 `decisions.md`，不入 schema） |
+| `/retro` | 复盘决策校准（取 git-SHA 快照对照当时假设分布 vs 现在结果） |
+| `/lookup` | 跨项目查历史教训（扫全 workspace 按关键词/type/status 检索） |
+
+**不是 prompt 拼装**：每个 skill 配 5 条 eval，内核数据过 `validate.mjs` 硬校验（可靠度越级直接 exit 1）。LLM 只负责判断，纪律交给确定性脚本。
+
+---
+
+<details>
+<summary>想深入？核心概念 · 数据契约 · 设计哲学</summary>
 
 ## 核心概念
 
@@ -66,80 +184,6 @@
 - **裸奔假设** = 影响高 × 证据弱（validator 自动判定，不落盘）——最该优先验证的对象
 - **分级 sign-off** — 弱证据 / 结构改动自动落库；`≥L3` 或 `status` 变更需人工确认（`/review`）
 - **活的闭环** — 承重假设被推翻 → 论点自动标 `needsRevision` → 修订留痕（`thesis.revisions[]`）
-
-## 决策回路
-
-```mermaid
-flowchart LR
-    A["💡 想法 / 论点"] --> U["👤 user-insight<br>⚔️ competitor-teardown<br>入料口：产 A / B·C 类假设"]
-    U --> B["🔍 assumption-xray<br>照妖镜：红队 + 点名裸奔"]
-    B --> C["🧪 experiment-design<br>实验设计：cheapest test → 规格"]
-    C --> D["📥 evidence-intake<br>证据采集：落回台账"]
-    D --> E["✅ /review<br>批量 sign-off"]
-    E --> F["⚖️ /decide<br>go / pivot / kill"]
-    F -->|pivot| G["✏️ revise-thesis<br>论点修订"]
-    G --> B
-    F -->|go| H["🚀 进入交付"]
-    F -->|kill| I["🗑 终止并留痕"]
-```
-
-> **回路外产出**：`/decide go` 之后才允许进入交付（造产品 / 写 PRD / 排期）。这些产出属"回路外补充件"，写入 `workspace/<项目>/artifacts/`（约定见 AGENTS.md），**不入内核 schema、不经 validate**——和 `decisions.md` 同级逻辑。
-
-## 快速开始
-
-> 在 agent 工具里你**说人话就行**，下面的命令是 agent 替你跑的（也可手动跑）。
-
-```bash
-# 1. 加载本仓库（agent 会先读 AGENTS.md 建立上下文）
-
-# 2. 新建项目
-node tools/new-project.mjs <项目名>      # 或在 agent 里 /new
-# → 自动生成 workspace/<项目名>/{thesis.md, ledger.json, sources/}
-
-# 3. 打开 thesis.md 填写六格论点
-# 4. 召唤照妖镜
-@assumption-xray <你的想法或论点>
-
-# 5. 设计实验
-@experiment-design                       # 把最便宜验证落成可追踪实验规格, status→testing
-
-# 6. 跑完实验 → 采集证据
-@evidence-intake <访谈 / 竞品 / 数据 / 链接>
-
-# 7. 每周批量确认强声明
-/review
-
-# 8. 收口决策
-/decide                                  # go / pivot / kill; pivot → @revise-thesis
-
-# 9. 校验内核
-node tools/validate.mjs workspace/<项目名>/ledger.json
-# validator 会提示下一步该跑哪个 skill
-```
-
-## 能力清单
-
-### Skills
-
-| Skill | 触发 | 主要产出 |
-| --- | --- | --- |
-| **assumption-xray** · 照妖镜（主角） | `@assumption-xray <想法>` | A/B/C/D 拆解 + 裸奔排序 + 最致命追问 + 每条 Fails if / 最便宜验证 / kill 标准 |
-| **user-insight** | `@user-insight <访谈/反馈>` | 2–4 个洞察主题 + 可证伪 A 类假设 |
-| **competitor-teardown** | `@competitor-teardown <竞品>` | 竞品矩阵（含「现状凑合方案」）+ 市场缺口 → B/C 类假设 |
-| **evidence-intake** | `@evidence-intake <证据>` | 归档 sources/ + 升降级台账 + 触发反驳循环 |
-| **experiment-design** | `@experiment-design` | 把最便宜验证落成可追踪实验规格，`status → testing` |
-| **revise-thesis** | `@revise-thesis` | 结构化修订论点，追加 `thesis.revisions[]`，闭合循环 |
-
-### Commands
-
-| 命令 | 作用 |
-| --- | --- |
-| `/new` | 一键初始化项目（slug 化命名 + 重名保护） |
-| `/list` | 列出所有项目 + 各自裸奔假设数 / 待 sign-off 数 |
-| `/review` | 批量 sign-off（扫描 ≥L3 或状态终局且未签字项） |
-| `/decide` | go / pivot / kill 决策日志（写 `decisions.md`，不入 schema） |
-| `/retro` | 复盘决策校准（取 git-SHA 快照对照当时假设分布 vs 现在结果） |
-| `/lookup` | 跨项目查历史教训（扫全 workspace 按关键词/type/status 检索） |
 
 ## 目录结构
 
@@ -236,6 +280,8 @@ reckoner/
 - **启发式下一步提示** — 校验通过后打印 `👉 下一步`（有裸奔→`@experiment-design`/`@evidence-intake`；`needsRevision`→`@revise-thesis`；待 sign-off→`/review`；全清→`/decide`）
 
 **eval 纪律** — 6 个 skill 各有 5 条 eval（含 ✅/❌ 对照 + 标"最关键"条），覆盖入料口、红队关口、实验设计、收口、闭合全回路节点。
+
+</details>
 
 ---
 

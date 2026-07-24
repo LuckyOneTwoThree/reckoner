@@ -1,4 +1,4 @@
-# AGENTS.md — 诤 使用约定
+# AGENTS.md — Reckoner 使用约定
 
 > 本文件是给 **AI agent**（Codex / Cowork / Claude Code 等）读的操作说明。
 > 人类用户用自然语言即可，agent 负责按本文件把想法变成对内核的读写。
