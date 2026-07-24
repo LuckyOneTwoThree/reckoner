@@ -21,9 +21,14 @@ description: "在一轮验证跑完、/review sign-off 之后，把『这个方�
    - 决定: ...
    - 理由: ...
    - 触发假设: [A-01 validated, B-02 refuted, ...]
+   - 仍裸奔的承重假设: [...]              ← go 必须为空；非空必须先补验证
+   - 反事实: 若 [上述仍裸奔假设] 被推翻，此决定是否仍成立？  ← go 时写死，事后不许改
+   - git SHA: <commit-sha>                ← 决策后立即 commit，把 SHA 填回此行（git-SHA 快照地基）
    - 下一步: ...
    ```
-5. 按决定指向回路：go → 离开内核去造（此时才允许）；pivot → `@revise-thesis`；kill → 归档，结束。
+   **反事实预登记**：go 的当下就要写死"若 [仍裸奔的承重假设] 被推翻，此决定是否仍成立"——这是事前预承诺，防 /retro 时事后合理化（"我早就知道 A-01 没问题"）。事后回溯不能诚实 un-know，所以必须在 go 时冻结。
+5. 决策后立即 `git add workspace/<项目>/ && git commit`，把 commit SHA 填回第 4 步的 `git SHA` 行——这是 Phase 1.5 /retro 取回"当时假设分布"的快照地基（`git show <SHA>:workspace/<项目>/ledger.json`），现在就值，不用等 Phase 1.5。
+6. 按决定指向回路：go → 离开内核去造（此时才允许）；pivot → `@revise-thesis`；kill → 归档，结束。
 
 ## 说明
 
