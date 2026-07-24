@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate async-standup ledger
+        run: node tools/validate.mjs workspace/async-standup/ledger.json
+
+      - name: Validate inspiration-notes ledger
+        run: node tools/validate.mjs workspace/inspiration-notes/ledger.json
+
+      - name: Verify all SKILL.md have eval.md
+        run: |
+          for dir in skills/*/; do
+            skill=$(basename "$dir")
+            if [ ! -f "skills/$skill/eval.md" ]; then
+              echo "❌ Missing eval.md: skills/$skill"
+              exit 1
+            fi
+          done
+          echo "✅ All skills have eval.md"
+
+      - name: Verify all SKILL.md have frontmatter
+        run: |
+          for f in skills/*/SKILL.md; do
+            if ! head -1 "$f" | grep -q "^---"; then
+              echo "❌ Missing frontmatter: $f"
+              exit 1
+            fi
+          done
+          echo "✅ All SKILL.md have frontmatter"

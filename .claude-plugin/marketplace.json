@@ -1,6 +1,6 @@
 {
   "name": "playbook",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "会顶嘴、有记忆的 PM 决策内核。每个 skill 回写 thesis + 假设台账，跨会话累积假设与证据。LLM 判断，脚本纪律。/ A PM decision kernel that talks back and remembers. Every skill writes back to a thesis + assumption-ledger, accumulating across sessions. LLM judges, scripts enforce.",
   "author": "LuckyOneTwoThree",
   "plugins": [
