@@ -99,7 +99,7 @@ playbook/
 
 ### 6.1 两个内核对象
 
-- **thesis（论点）**：决策内核的北极星，必须可被证伪。字段：`id(T-NN)`、`schemaVersion("4.0")`、`statement`、`targetUser`、`coreProblem`、`solutionHypothesis`、`whyNow`、`successSignal`、`needsRevision(bool)`、`revisions[]`（唯一的 history 机制）、`createdAt`。
+- **thesis（论点）**：决策内核的北极星，必须可被证伪。字段：`id(T-NN)`、`schemaVersion("4.1")`、`statement`、`targetUser`、`coreProblem`、`solutionHypothesis`、`whyNow`、`successSignal`、`needsRevision(bool)`、`bizModel`/`stage`(4.1 新增,optional,用于 /lookup 跨项目维度硬标记)、`revisions[]`（唯一的 history 机制）、`createdAt`。
 - **assumption-ledger（假设台账，心脏）**：假设对象数组。字段：`id(<TYPE>-NN)`、`type(A/B/C/D)`、`statement`、`impact(high/med/low)`、`evidenceLevel(L1–L4)`、`status(todo/testing/validated/refuted)`、`failsIf`、`cheapestTest`、`killCriteria`、`provenance{reliability, source, signedOffBy, signedOffAt}`、`freshness{lastVerified, ttlDays(默认30)}`。
 
 ### 6.2 四类假设

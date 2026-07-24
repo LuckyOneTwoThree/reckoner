@@ -27,7 +27,7 @@ metadata:
 
 1. 读 thesis 与 ledger，确认触发原因：哪条假设 refuted / 什么决定。若 `needsRevision` 为 false 且无 pivot 决定，停下问用户为何要改。
 2. 定位**最小修订面**：statement / targetUser / coreProblem / solutionHypothesis / whyNow / successSignal 里，到底哪几格被这条证据推翻了。别顺手改无关格。
-3. 写修订：更新对应字段（保持 `schemaVersion: "4.0"`、`id` 不变）。
+3. 写修订：更新对应字段（保持 `schemaVersion: "4.1"`、`id` 不变）。
 4. 追加 `revisions[]` 一条：`{ at: 今天, reason: 一句话为什么改（点名触发假设 ID）, before: 旧值, after: 新值 }`。`at` 与 `reason` 必填；`before/after` 强烈建议填。
 5. 复位 `needsRevision = false`。
 6. 收尾指向回路：修订后的论点通常会带出新的承重假设——建议下一步 = `@assumption-xray` 对新论点重新红队。**不得跳到方案/排期。**
@@ -56,7 +56,7 @@ metadata:
 ## Kernel Write-back
 
 - 只写 thesis：改字段 + append `revisions[]` + `needsRevision → false`。**不新增 schema 外字段**（thesis `additionalProperties:false`）。
-- 保持 `schemaVersion: "4.0"`、`id` 不变。
+- 保持 `schemaVersion: "4.1"`、`id` 不变。
 - 改完跑 `node tools/validate.mjs workspace/<项目>/ledger.json`（validate 接 ledger 路径但连带校验同目录 thesis.md）：确认留痕软检查通过（needsRevision 已复位、revisions 有条目，不再报 ⚠️ 提醒）。
 
 ## Notes

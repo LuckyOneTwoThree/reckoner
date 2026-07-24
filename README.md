@@ -8,7 +8,7 @@
 
 [![P0](https://img.shields.io/badge/stage-P0-blue)]()
 [![Skills](https://img.shields.io/badge/skills-6-green)]()
-[![Commands](https://img.shields.io/badge/commands-5-green)]()
+[![Commands](https://img.shields.io/badge/commands-6-green)]()
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
 [![GitHub](https://img.shields.io/badge/repo-pm--playbook-black?logo=github)](https://github.com/LuckyOneTwoThree/pm-playbook)
 
@@ -173,7 +173,7 @@ playbook/
 
 **thesis**（产品论点）
 
-`id`（`T-NN`）· `schemaVersion`（`"4.0"`）· `statement` · `targetUser` · `coreProblem` · `solutionHypothesis` · `whyNow` · `successSignal` · `needsRevision`（bool，承重假设被推翻时自动置位）· `revisions[]`（唯一 history 机制）· `createdAt`
+`id`（`T-NN`）· `schemaVersion`（`"4.1"`）· `statement` · `targetUser` · `coreProblem` · `solutionHypothesis` · `whyNow` · `successSignal` · `needsRevision`（bool，承重假设被推翻时自动置位）· `bizModel`/`stage`（4.1 新增 optional,用于 /lookup 跨项目维度硬标记）· `revisions[]`（唯一 history 机制）· `createdAt`
 
 **assumption-ledger**（假设台账）
 
@@ -219,8 +219,8 @@ playbook/
 
 | 阶段 | 内容 |
 | --- | --- |
-| **P0**（本仓库） | thesis + ledger 两对象 + 6 skill + 5 命令 + validator + 项目初始化 + agent 约定。回路闭合：照妖镜 → 实验设计 → 证据采集 → review → decide → 论点修订；/retro 复盘校准 |
-| **Phase 1.5** | 个人层（跨项目学习 `/lookup`）、OST（机会方案树）；`/retro` 已下移至 P0 |
+| **P0**（本仓库） | thesis + ledger 两对象 + 6 skill + 6 命令 + validator + 项目初始化 + agent 约定。回路闭合：照妖镜 → 实验设计 → 证据采集 → review → decide → 论点修订；/retro 复盘校准；/lookup 跨项目检索 |
+| **Phase 1.5** | OST（机会方案树）；`/retro` + `/lookup` 已下移至 P0 |
 | **Phase 2** | Web 体检仪表盘（内核数据稳定、需要可视化留存时） |
 
 ## 校验与质量
@@ -228,7 +228,7 @@ playbook/
 `tools/validate.mjs`（唯一确定性代码，零依赖）
 
 - **对 `ledger.json` 全校验** — 枚举校验、可靠度上限、ID 自动分配 `<TYPE>-NN`、计算 `isNaked`/`stale`、标记待 sign-off、错误 `exit 1`
-- **对 `thesis.md` 分层执法** — 扁平标量字段（`schemaVersion="4.0"` / `id=T-NN` / `needsRevision=bool`）**硬失败 exit 1**；嵌套字段（`revisions[]`）软警告
+- **对 `thesis.md` 分层执法** — 扁平标量字段（`schemaVersion=4.1` / `id=T-NN` / `needsRevision=bool`）**硬失败 exit 1**；嵌套字段（`revisions[]`）软警告；schemaVersion=4.0 软警告+迁移提示
 - **启发式下一步提示** — 校验通过后打印 `👉 下一步`（有裸奔→`@experiment-design`/`@evidence-intake`；`needsRevision`→`@revise-thesis`；待 sign-off→`/review`；全清→`/decide`）
 
 **eval 纪律** — 6 个 skill 各有 5 条 eval（含 ✅/❌ 对照 + 标"最关键"条），覆盖入料口、红队关口、实验设计、收口、闭合全回路节点。

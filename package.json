@@ -1,12 +1,14 @@
 {
   "name": "pm-playbook",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "会顶嘴、有记忆的 PM 决策内核。每个 skill 回写 thesis + 假设台账，跨会话累积假设与证据。LLM 判断，脚本纪律。",
   "type": "module",
   "private": true,
   "scripts": {
     "validate": "node tools/validate.mjs workspace/inspiration-notes/ledger.json",
-    "validate:all": "node tools/validate.mjs workspace/async-standup/ledger.json && node tools/validate.mjs workspace/inspiration-notes/ledger.json"
+    "validate:all": "node tools/validate.mjs workspace/async-standup/ledger.json && node tools/validate.mjs workspace/inspiration-notes/ledger.json",
+    "migrate": "node tools/migrate.mjs",
+    "lookup": "node tools/lookup.mjs"
   },
   "keywords": ["pm", "decision-kernel", "assumption-ledger", "claude-plugin", "skill-pack"],
   "author": "LuckyOneTwoThree",

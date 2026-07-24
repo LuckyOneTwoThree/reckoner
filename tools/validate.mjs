@@ -125,11 +125,13 @@ if (thesisFile !== file && fs.existsSync(thesisFile)) {
  const m = new RegExp(`^\\s*${k}:\\s*(.+?)\\s*$`, "m").exec(front)
  return m ? m[1].replace(/^["']|["']$/g, "") : null
  }
- // 1. schemaVersion const "4.0"（硬失败）
+ // 1. schemaVersion 硬校验 enum ["4.0","4.1"]（4.0 软警告+迁移提示，4.1 硬通过）
  const sv = get("schemaVersion")
- if (sv === null) thesisErrors.push('thesis.md frontmatter 缺 schemaVersion（应为 "4.0"）')
- else if (sv !== "4.0")
- thesisErrors.push(`thesis.schemaVersion 应为 "4.0"，实际 "${sv}"`)
+ if (sv === null) thesisErrors.push('thesis.md frontmatter 缺 schemaVersion（应为 "4.1"）')
+ else if (sv !== "4.0" && sv !== "4.1")
+ thesisErrors.push(`thesis.schemaVersion 应为 "4.1"，实际 "${sv}"`)
+ else if (sv === "4.0")
+ revisionWarn = 'thesis.schemaVersion=4.0 已过期——请跑 node tools/migrate.mjs 升级到 4.1（加 bizModel/stage 字段，用于 /lookup 跨项目维度硬标记）。'
  // 2. id pattern ^T-[0-9]{2,}$（硬失败）
  const tid = get("id")
  if (tid === null) thesisErrors.push("thesis.md frontmatter 缺 id（格式 T-NN）")

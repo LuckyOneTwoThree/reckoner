@@ -2,8 +2,12 @@
 # 复制本文件到 workspace/<你的项目名>/thesis.md 并填写（或直接跑 /new）。
 # 结构化字段（供 skill 读取；revisions[] 必须写在这段 frontmatter 里，validator 只扫 frontmatter）：
 id: T-01
-schemaVersion: "4.0"
+schemaVersion: "4.1"
 needsRevision: false
+# 4.1 新增字段（optional，用于 /lookup 跨项目维度硬标记；enum: B2B/B2C/B2B2C/自用）
+bizModel: ""
+# 4.1 新增字段（optional；enum: 0→1/1→10/10→100）
+stage: ""
 targetUser: ""
 coreProblem: ""
 solutionHypothesis: ""

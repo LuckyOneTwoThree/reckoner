@@ -38,8 +38,8 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
  - `writeback-contract.md` — 回写规范、分级 sign-off、循环状态机。**动内核前必读。**
  - `templates/thesis.md` — 论点模板。
 - `skills/<name>/SKILL.md` — 原子能力，含 frontmatter（顶层 `name`/`description` + `metadata` 块下 `reads`/`writes`/`eval`）。触发某能力时**先读对应 SKILL.md 再执行**。
-- `commands/*.md` — 斜杠命令流程（`/new`、`/list`、`/review`、`/decide`、`/retro`）。
-- `tools/*.mjs` — 零依赖 node 脚本（`new-project.mjs`、`validate.mjs`）。
+- `commands/*.md` — 斜杠命令流程（`/new`、`/list`、`/review`、`/decide`、`/retro`、`/lookup`）。
+- `tools/*.mjs` — 零依赖 node 脚本（`new-project.mjs`、`validate.mjs`、`migrate.mjs`、`lookup.mjs`）。
 - `workspace/<project>/` — 每个项目一个隔离文件夹（`thesis.md` + `ledger.json` + `sources/`）。
 
 ## 能力清单（何时用哪个）
@@ -56,11 +56,12 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 | 每周确认强声明 | `/review` | 读 `commands/review.md`，逐条 sign-off | /decide 定 go/pivot/kill |
 | 记决策 go/pivot/kill | `/decide` | 读 `commands/decide.md`，写 `decisions.md` 决策日志（含反事实预登记 + git SHA） | go→离开内核 / pivot→@revise-thesis |
 | 复盘决策校准 | `/retro` | 读 `commands/retro.md`，取 git-SHA 快照对照当时假设分布 vs 现在结果，读回反事实 | 只读不评，不触发回路动作 |
+| 跨项目查历史教训 | `/lookup` | 跑 `node tools/lookup.mjs "<topic>" --current=<当前项目>`，扫全 workspace 按关键词/type/status 检索，硬标 bizModel/stage 维度差异 | agent 只匹配不迁移，是否适用由人判断 |
 | 论点被证伪要修订 | `@revise-thesis` | 读 SKILL.md，改 thesis + 追加 revisions[]，复位 needsRevision | @assumption-xray 重新红队 |
 
 ## 铁律（每次回写都要守）
 
-1. **写台账前后都跑校验**：任何对 `ledger.json` 的改动，结束时必须 `node tools/validate.mjs workspace/<project>/ledger.json`，通过才算完成。validator 现在也**硬校验 thesis.md 的扁平字段**（schemaVersion="4.0" / id=T-NN / needsRevision=bool）——改了 thesis 也要跑。revisions[] 必须写在 frontmatter，否则软检查抓不到。
+1. **写台账前后都跑校验**：任何对 `ledger.json` 的改动，结束时必须 `node tools/validate.mjs workspace/<project>/ledger.json`，通过才算完成。validator 现在也**硬校验 thesis.md 的扁平字段**（schemaVersion=4.1 / id=T-NN / needsRevision=bool）——改了 thesis 也要跑。revisions[] 必须写在 frontmatter，否则软检查抓不到。
 2. **ID 交给脚本**：新假设 `id` 留空，由 validator 按 `<TYPE>-NN` 分配；不要自己编号。
 3. **证据等级有上限**：`evidenceLevel` 不得高于来源 `provenance.reliability` 的上限（self≤L1 / indirect≤L2 / direct≤L3 / data≤L4）。
 4. **分级 sign-off**：结构性改动和 ≤L2 自动落库；`≥L3` 或 `status→validated/refuted` 必须走 `/review` 人工确认，不要自作主张标已验证。`signedOffBy` 格式：人工写人名/邮箱本地名，agent 代批写 `agent:<skill或命令名>`，未签字保持 `null`。
@@ -81,4 +82,4 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 - 不要把方法论/外部长文照搬进 skill 输出。
 - 不要跳过 validator 直接宣称台账已更新。
 - 不要打稻草人：攻 steelman 或不攻。
-- 不要新增 Phase 1.5+ 的对象（personal 层 / OST / PRD·spec 生成），除非用户明确要求——见 `docs/ARCHITECTURE.md` 的触发条件。（注：`/decide` 决策日志 + `/retro` 复盘已落地，写入 `workspace/<项目>/decisions.md`，不入内核 schema。personal 层 / OST 仍需触发条件满足。）
+- 不要新增 Phase 1.5+ 的对象（personal 层 / OST / PRD·spec 生成），除非用户明确要求——见 `docs/ARCHITECTURE.md` 的触发条件。（注：`/decide` + `/retro` + `/lookup` 已落地，/decide 决策日志不入内核 schema；/lookup 无状态跨项目扫描,不建 personal/ 持久对象。OST 仍需触发条件满足。）
