@@ -20,7 +20,8 @@
         "commands/new.md",
         "commands/list.md",
         "commands/review.md",
-        "commands/decide.md"
+        "commands/decide.md",
+        "commands/retro.md"
       ]
     }
   ]

@@ -38,7 +38,7 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
  - `writeback-contract.md` — 回写规范、分级 sign-off、循环状态机。**动内核前必读。**
  - `templates/thesis.md` — 论点模板。
 - `skills/<name>/SKILL.md` — 原子能力，含 frontmatter（顶层 `name`/`description` + `metadata` 块下 `reads`/`writes`/`eval`）。触发某能力时**先读对应 SKILL.md 再执行**。
-- `commands/*.md` — 斜杠命令流程（`/new`、`/list`、`/review`、`/decide`）。
+- `commands/*.md` — 斜杠命令流程（`/new`、`/list`、`/review`、`/decide`、`/retro`）。
 - `tools/*.mjs` — 零依赖 node 脚本（`new-project.mjs`、`validate.mjs`）。
 - `workspace/<project>/` — 每个项目一个隔离文件夹（`thesis.md` + `ledger.json` + `sources/`）。
 
@@ -54,7 +54,8 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 | 拆竞品 | `@competitor-teardown` | 读 SKILL.md，回写 B/C 类假设 | @assumption-xray |
 | 录入证据 | `@evidence-intake` | 读 SKILL.md，存 `sources/`，升降级台账 | /review 或 修订 thesis |
 | 每周确认强声明 | `/review` | 读 `commands/review.md`，逐条 sign-off | /decide 定 go/pivot/kill |
-| 记决策 go/pivot/kill | `/decide` | 读 `commands/decide.md`，写 `decisions.md` 决策日志 | go→离开内核 / pivot→@revise-thesis |
+| 记决策 go/pivot/kill | `/decide` | 读 `commands/decide.md`，写 `decisions.md` 决策日志（含反事实预登记 + git SHA） | go→离开内核 / pivot→@revise-thesis |
+| 复盘决策校准 | `/retro` | 读 `commands/retro.md`，取 git-SHA 快照对照当时假设分布 vs 现在结果，读回反事实 | 只读不评，不触发回路动作 |
 | 论点被证伪要修订 | `@revise-thesis` | 读 SKILL.md，改 thesis + 追加 revisions[]，复位 needsRevision | @assumption-xray 重新红队 |
 
 ## 铁律（每次回写都要守）
@@ -80,4 +81,4 @@ skill 虽各自独立（standalone-first），但产出都只是“回路里的�
 - 不要把方法论/外部长文照搬进 skill 输出。
 - 不要跳过 validator 直接宣称台账已更新。
 - 不要打稻草人：攻 steelman 或不攻。
-- 不要新增 Phase 1.5+ 的对象（personal 层 / OST / PRD·spec 生成），除非用户明确要求——见 `docs/ARCHITECTURE.md` 的触发条件。（注：`/decide` 决策日志已应用户请求落地，写入 `workspace/<项目>/decisions.md`，不入内核 schema。）
+- 不要新增 Phase 1.5+ 的对象（personal 层 / OST / PRD·spec 生成），除非用户明确要求——见 `docs/ARCHITECTURE.md` 的触发条件。（注：`/decide` 决策日志 + `/retro` 复盘已落地，写入 `workspace/<项目>/decisions.md`，不入内核 schema。personal 层 / OST 仍需触发条件满足。）

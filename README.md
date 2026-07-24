@@ -8,7 +8,7 @@
 
 [![P0](https://img.shields.io/badge/stage-P0-blue)]()
 [![Skills](https://img.shields.io/badge/skills-6-green)]()
-[![Commands](https://img.shields.io/badge/commands-4-green)]()
+[![Commands](https://img.shields.io/badge/commands-5-green)]()
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
 [![GitHub](https://img.shields.io/badge/repo-pm--playbook-black?logo=github)](https://github.com/LuckyOneTwoThree/pm-playbook)
 
@@ -219,8 +219,8 @@ playbook/
 
 | 阶段 | 内容 |
 | --- | --- |
-| **P0**（本仓库） | thesis + ledger 两对象 + 6 skill + 4 命令 + validator + 项目初始化 + agent 约定。回路闭合：照妖镜 → 实验设计 → 证据采集 → review → decide → 论点修订 |
-| **Phase 1.5** | 个人层（跨项目学习）、OST（机会方案树）、结构化决策记录 + 校准闭环（`/retro`） |
+| **P0**（本仓库） | thesis + ledger 两对象 + 6 skill + 5 命令 + validator + 项目初始化 + agent 约定。回路闭合：照妖镜 → 实验设计 → 证据采集 → review → decide → 论点修订；/retro 复盘校准 |
+| **Phase 1.5** | 个人层（跨项目学习 `/lookup`）、OST（机会方案树）；`/retro` 已下移至 P0 |
 | **Phase 2** | Web 体检仪表盘（内核数据稳定、需要可视化留存时） |
 
 ## 校验与质量
