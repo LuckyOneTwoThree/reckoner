@@ -22,9 +22,7 @@
 **迁移步骤**:
 1. `node tools/migrate.mjs`(无参数扫所有 workspace/*/thesis.md)或 `node tools/migrate.mjs <workspace/项目名>`
 2. 脚本升版本号 + 插入空 bizModel/stage
-3. **人工/agent 回填实际值**(脚本不猜值):
-   - async-standup: `bizModel: "B2B"`, `stage: "0→1"`
-   - inspiration-notes: `bizModel: "B2C"`, `stage: "0→1"`
+3. **人工/agent 回填实际值**(脚本不猜值,按项目真实情况填)
 4. `npm run validate:all` 确认全绿
 5. 提交
 

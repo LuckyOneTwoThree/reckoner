@@ -30,7 +30,7 @@ decision-log ▓▓▓░░░░░░░░░░░░░░░░░  3/5 v
 personal/   ▓░░░░░░░░░░░░░░░░░░░  2 项目但无复用意图（触发未满足）
 ```
 
-inspiration-notes 跑通后触发器有进展但未自然满足。decision-log 离触发最近——再跑 2 条假设到 validated/refuted 即触发。
+两个项目跑通后触发器有进展但未自然满足。decision-log 离触发最近——再跑 2 条假设到 validated/refuted 即触发。
 
 ---
 

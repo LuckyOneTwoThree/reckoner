@@ -16,11 +16,17 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Validate async-standup ledger
-        run: node tools/validate.mjs workspace/async-standup/ledger.json
-
-      - name: Validate inspiration-notes ledger
-        run: node tools/validate.mjs workspace/inspiration-notes/ledger.json
+      - name: Validate all project ledgers (skip if workspace empty)
+        run: |
+          found=0
+          for f in workspace/*/ledger.json; do
+            [ -f "$f" ] || continue
+            found=1
+            node tools/validate.mjs "$f"
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "ℹ️ workspace/ 无项目（框架仓库默认状态），跳过 ledger 校验"
+          fi
 
       - name: Verify all SKILL.md have eval.md
         run: |

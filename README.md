@@ -164,8 +164,8 @@ playbook/
 ├─ tools/
 │  ├─ new-project.mjs           # 初始化脚本（零依赖）
 │  └─ validate.mjs              # 唯一代码：schema + 信任 + ID 护栏
-├─ workspace/                   # 每个项目一个隔离文件夹
-│  └─ async-standup/            # 示例项目（可删）
+├─ workspace/                   # 用户工作区（gitignored，不入库——runtime 数据）
+│  └─ <project>/                # 跑 /new 后生成，每个项目一个隔离文件夹
 └─ docs/ARCHITECTURE.md         # 锁定版设计说明
 ```
 

@@ -5,8 +5,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "validate": "node tools/validate.mjs workspace/inspiration-notes/ledger.json",
-    "validate:all": "node tools/validate.mjs workspace/async-standup/ledger.json && node tools/validate.mjs workspace/inspiration-notes/ledger.json",
+    "validate:all": "for f in workspace/*/ledger.json; do [ -f \"$f\" ] && node tools/validate.mjs \"$f\"; done",
     "migrate": "node tools/migrate.mjs",
     "lookup": "node tools/lookup.mjs"
   },

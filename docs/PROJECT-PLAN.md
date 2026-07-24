@@ -175,9 +175,9 @@ needsRevision 复位 false
 
 ---
 
-## 8. 人机交互 / 使用流程（以示例项目 async-standup 为例）
+## 8. 人机交互 / 使用流程（以一个示例项目为例）
 
-1. **冷启动**：`/new async-standup` → 填 `thesis.md` 六格。
+1. **冷启动**：`/new <项目名>` → 填 `thesis.md` 六格。
 2. **照妖镜**：`@assumption-xray` → 输出红队表，点名 A-01/B-01/C-01 裸奔，追问最致命一条。
 3. **分级 sign-off**：弱证据自动入台账；强声明攒到 `/review`。
 4. **证据采集**：`@evidence-intake <访谈>` → 归档 sources/，把 A-01 从 L1 升到 L3（需 sign-off）。
@@ -230,7 +230,6 @@ needsRevision 复位 false
 - [x] skills：assumption-xray（+eval.md）、user-insight（+stub eval）、competitor-teardown（+stub eval）、evidence-intake（+stub eval）、experiment-design（+eval.md）、revise-thesis（+eval.md）—— 6 skill 全闭环
 - [x] commands：new.md、list.md、review.md、decide.md
 - [x] tools：new-project.mjs（一键初始化）、validate.mjs（确定性校验，含 thesis 扁平字段硬校验 + 启发式下一步提示）
-- [x] 示例项目：workspace/async-standup/（填好的 thesis + 3 条种子假设 ledger + sources/）
 
 ### 12.2 已验证（实测通过）
 
