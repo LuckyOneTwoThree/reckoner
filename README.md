@@ -144,7 +144,7 @@ node tools/validate.mjs workspace/<项目名>/ledger.json
 
 ---
 
-<details>
+<details open>
 <summary>想深入？核心概念 · 数据契约 · 设计哲学</summary>
 
 ## 核心概念
