@@ -37,25 +37,25 @@ git clone → /new my-project → @assumption-xray → 被顶回来
 
 ---
 
-## 为什么做这个
+## 🎯 为什么做这个
 
 产品决策天然主观、容易被自己「刷」出信心、容易自欺。现有 AI PM 助手大多是**无状态文档生成器**，Reckoner 正面直击三大反模式：
 
-> ### 没记忆
+> ### 🧠 没记忆
 > 每次对话从零开始，上次的假设和证据全部丢失。
 > **→ Reckoner：有记忆** — 结论回写内核，跨会话留存，可被反事实回看。
 
-> ### 会谄媚
+> ### 🤝 会谄媚
 > 倾向附和，不会真的顶你。
 > **→ Reckoner：会顶嘴** — 默认「风险是真的」，先 steelman 再攻击。
 
-> ### 散落结论
+> ### 📄 散落结论
 > 结论散落在文档里，无法积累成判断资产。
 > **→ Reckoner：可追溯** — 假设-证据-决策显式化为链路。
 
 ---
 
-## 30 秒感受一下：照妖镜怎么顶你
+## ⚡ 30 秒感受一下：照妖镜怎么顶你
 
 **你说**：「做个 AI 记账 App，主打自动分类，大家都嫌手动记账烦。」
 
@@ -95,7 +95,7 @@ git clone → /new my-project → @assumption-xray → 被顶回来
 
 ---
 
-## 决策回路
+## 🔁 决策回路
 
 ```mermaid
 flowchart LR
@@ -130,7 +130,7 @@ flowchart LR
 
 ---
 
-## 安装
+## 📦 安装
 
 ```bash
 git clone https://github.com/LuckyOneTwoThree/reckoner.git
@@ -145,7 +145,7 @@ cd reckoner
 
 ---
 
-## 快速开始
+## 🚀 快速开始
 
 > 在 agent 工具里你**说人话就行**，下面的命令是 agent 替你跑的（也可手动跑）。
 
@@ -162,7 +162,7 @@ cd reckoner
 
 ---
 
-## 能力清单
+## 🧰 能力清单
 
 > 注：**照妖镜** 是 `assumption-xray` 这一个 skill 的昵称，仅在该 skill 语境下使用。
 
@@ -193,19 +193,19 @@ cd reckoner
 ---
 
 <details open>
-<summary><strong>想深入？核心概念 · 数据契约 · 设计哲学</strong></summary>
+<summary><strong>🧠 想深入？核心概念 · 数据契约 · 设计哲学</strong></summary>
 
 ## 核心概念
 
-> ### 第一原则：LLM 负责判断，脚本负责纪律。
+> ### ⚖️ 第一原则：LLM 负责判断，脚本负责纪律。
 > LLM 做拆解、攻击、归类、写作；确定性的校验、ID 分配、上限约束交给 `tools/*.mjs`。二者不互相替代。
 
 ### 两个内核对象
 
 | 对象 | 角色 | 说明 |
 |---|---|---|
-| **thesis** | 北极星 | 必须可被证伪的陈述：目标用户 / 核心问题 / 解法假设 / 为什么现在 / 成功信号 |
-| **assumption-ledger** | 心脏 | 把论点拆解为可验证假设，分类管理、分级留存——决策内核最核心的对象 |
+| 🧭 **thesis** | 北极星 | 必须可被证伪的陈述：目标用户 / 核心问题 / 解法假设 / 为什么现在 / 成功信号 |
+| 💓 **assumption-ledger** | 心脏 | 把论点拆解为可验证假设，分类管理、分级留存——决策内核最核心的对象 |
 
 ### 四类假设 · A / B / C / D
 
@@ -244,7 +244,7 @@ cd reckoner
 <tr>
 <td width="50%" valign="top">
 
-**kernel/** — 决策内核（真 IP）
+**🧠 kernel/** — 决策内核（真 IP）
 
 - `thesis.schema.json`
 - `assumption-ledger.schema.json`
@@ -254,7 +254,7 @@ cd reckoner
 </td>
 <td width="50%" valign="top">
 
-**skills/** — 6 个原子能力
+**🛠 skills/** — 6 个原子能力
 
 - `assumption-xray` <sub>假设红队（照妖镜）</sub>
 - `user-insight` <sub>产 A 类假设</sub>
@@ -268,7 +268,7 @@ cd reckoner
 <tr>
 <td width="50%" valign="top">
 
-**tools/** — 零依赖脚本
+**⚙️ tools/** — 零依赖脚本
 
 - `new-project.mjs` <sub>初始化</sub>
 - `validate.mjs` <sub>唯一确定性纪律闸：schema + 信任 + ID 护栏</sub>
@@ -278,7 +278,7 @@ cd reckoner
 </td>
 <td width="50%" valign="top">
 
-**commands/** — 6 个斜杠命令
+**📜 commands/** — 6 个斜杠命令
 
 `/new` · `/list` · `/review`
 `/decide` · `/retro` · `/lookup`
@@ -302,7 +302,7 @@ cd reckoner
 <tr>
 <td width="50%" valign="top">
 
-**thesis** — 产品论点
+**🧭 thesis** — 产品论点
 
 ```yaml
 id: T-NN
@@ -323,7 +323,7 @@ createdAt: ISO8601
 </td>
 <td width="50%" valign="top">
 
-**assumption-ledger** — 假设台账
+**💓 assumption-ledger** — 假设台账
 
 ```yaml
 id: <TYPE>-NN          # 脚本自动分配
@@ -370,21 +370,24 @@ freshness:
 <tr>
 <td width="33%" valign="top" align="center">
 
-### 对抗而非附和
+### ⚔️
+**对抗而非附和**
 
 默认「风险是真的」，先 steelman 再攻击，不打稻草人，也不制造虚假怀疑
 
 </td>
 <td width="33%" valign="top" align="center">
 
-### 可信的记忆才值得留存
+### 🛡
+**可信的记忆才值得留存**
 
 不可信的记忆比没有记忆更糟，所以有信任分级 + 确定性校验硬闸
 
 </td>
 <td width="33%" valign="top" align="center">
 
-### 精简优先
+### 🎯
+**精简优先**
 
 P0 只做被真实用到的东西，一切「看起来更完整」的层都推迟到有触发条件时再建
 
@@ -398,7 +401,7 @@ P0 只做被真实用到的东西，一切「看起来更完整」的层都推�
 <tr>
 <td width="50%" valign="top">
 
-**魂** · 来自作者的产品方法论
+**🫀 魂** · 来自作者的产品方法论
 
 - 决策内核
 - A/B/C/D 四类假设
@@ -409,7 +412,7 @@ P0 只做被真实用到的东西，一切「看起来更完整」的层都推�
 </td>
 <td width="50%" valign="top">
 
-**手艺** · 借鉴主流 AI skill 工程
+**🔧 手艺** · 借鉴主流 AI skill 工程
 
 - `SKILL.md` frontmatter 规范
 - steelman-再攻击
