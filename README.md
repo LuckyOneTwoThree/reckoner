@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/assets/reckoner-icon.png" alt="Reckoner" width="202">
+
 # Reckoner
 
 **会顶嘴、有记忆的决策内核**
