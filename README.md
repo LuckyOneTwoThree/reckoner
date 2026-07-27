@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/reckoner-icon.png" alt="Reckoner" width="100">
+<img src="docs/assets/reckoner-icon.png" alt="Reckoner" width="100" style="border-radius: 22px;">
 
 # Reckoner
 
