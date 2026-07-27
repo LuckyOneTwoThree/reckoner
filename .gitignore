@@ -22,3 +22,6 @@ desktop.ini
 # 用户工作区数据（runtime，不入库——本仓库是框架，不托管用户项目数据）
 workspace/*/
 !workspace/.gitkeep
+
+# 本地草稿/模板（不入库）
+docs/hero_template.html
