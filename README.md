@@ -1,12 +1,10 @@
 <div align="center">
 
-<img src="docs/assets/reckoner-icon.png" alt="Reckoner" width="160">
+<img src="docs/assets/reckoner-icon.png" alt="Reckoner" width="100">
 
 # Reckoner
 
-**会顶嘴、有记忆的决策内核**
-
-给主观、可刷、易自欺的产品决策，装一个不附和、会积累的决策 OS。
+**会顶嘴、有记忆的决策内核** — 给主观、可刷、易自欺的产品决策，装一个不附和、会积累的决策 OS。
 
 [![CI](https://github.com/LuckyOneTwoThree/reckoner/actions/workflows/ci.yml/badge.svg)](https://github.com/LuckyOneTwoThree/reckoner/actions/workflows/ci.yml)
 [![Skills](https://img.shields.io/badge/skills-6-green)](https://github.com/LuckyOneTwoThree/reckoner)
