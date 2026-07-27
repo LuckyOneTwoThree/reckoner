@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/reckoner-icon.png" alt="Reckoner" width="202">
+<img src="docs/assets/reckoner-icon.png" alt="Reckoner" width="160">
 
 # Reckoner
 
@@ -12,7 +12,6 @@
 [![Skills](https://img.shields.io/badge/skills-6-green)](https://github.com/LuckyOneTwoThree/reckoner)
 [![Commands](https://img.shields.io/badge/commands-6-green)](https://github.com/LuckyOneTwoThree/reckoner)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](https://github.com/LuckyOneTwoThree/reckoner)
-[![GitHub](https://img.shields.io/badge/repo-reckoner-black?logo=github)](https://github.com/LuckyOneTwoThree/reckoner)
 
 </div>
 
@@ -20,25 +19,27 @@
 
 ![](docs/assets/hero-light.png)
 
-> 不是又一个无状态文档生成器，而是一个会积累、会顶嘴的决策 OS。
+> **不是又一个无状态文档生成器**，而是一个会积累、会顶嘴的决策 OS。
 > 照妖镜（assumption-xray）只是入口；真正留住你的是内核与跨项目校准。
 
 <details>
-<summary>English TL;DR</summary>
+<summary><strong>English TL;DR</strong></summary>
 
 **Reckoner** is a decision OS for product managers that refuses to flatter you. Every skill run writes its conclusions back into a durable kernel (`thesis` + `assumption-ledger`), so your assumptions, evidence, and expiry dates survive across sessions. It red-teams your ideas (the "照妖镜 / assumption-xray" skill), designs the cheapest possible test, ingests evidence, and forces a sign-off before any build decision. Deterministic scripts (`validate.mjs`) enforce schema and trust ceilings; the LLM only judges. 6 skills, 6 commands, schema-hard-validated memory.
 
 </details>
 
+---
+
 ## 为什么
 
 产品决策天然主观、容易被自己「刷」出信心、容易自欺。现有 AI PM 助手大多是**无状态文档生成器**，Reckoner 正面直击三大反模式：
 
-| 反模式                  | Reckoner 的解法                       |
-| -------------------- | ---------------------------------- |
-| 每次对话从零开始，不记得上次的假设和证据 | **有记忆** — 结论回写内核，跨会话留存             |
-| 倾向附和（谄媚），不会真的顶你      | **会顶嘴** — 默认「风险是真的」，先 steelman 再攻击 |
-| 结论散落在文档里，无法积累成判断资产   | **可追溯** — 假设-证据-决策显式化为链路           |
+| 反模式 | Reckoner 的解法 |
+| --- | --- |
+| 每次对话从零开始，不记得上次的假设和证据 | **有记忆** — 结论回写内核，跨会话留存 |
+| 倾向附和（谄媚），不会真的顶你 | **会顶嘴** — 默认「风险是真的」，先 steelman 再攻击 |
+| 结论散落在文档里，无法积累成判断资产 | **可追溯** — 假设-证据-决策显式化为链路 |
 
 ## 30 秒感受一下：照妖镜怎么顶你
 
@@ -46,15 +47,17 @@
 
 **Reckoner 顶回来**：
 
-🩲 **裸奔假设 A-01**（影响高 × 证据 L1）
+```
+🩲 裸奔假设 A-01（影响高 × 证据 L1）
 　用户愿意为"自动分类"授权银行数据、放弃手动掌控感
 　├ Fails if：访谈 10 人 <3 人愿意连银行卡
 　├ 最便宜验证：5 人看假界面问"你会连吗"（0 成本 / 1 天）
 　└ kill 标准：连接意愿 <30% → 整个方向重估
 
-⚔️ **最致命追问**
+⚔️ 最致命追问
 　分类准确率只有 80% 时，用户觉得"省事"还是"更不放心"？
 　—— 这决定了你是提效工具还是焦虑放大器。
+```
 
 > 这一块的转化力超过后面所有架构表格的总和：把「会顶嘴 / 裸奔 / cheapest test / kill 标准」一次性变成你能感受到的真实价值。
 
@@ -124,32 +127,32 @@ node tools/validate.mjs workspace/<项目名>/ledger.json
 
 ### Skills
 
-| Skill                          | 触发                          | 主要产出                                                      |
-| ------------------------------ | --------------------------- | --------------------------------------------------------- |
-| **assumption-xray**（昵称：照妖镜，主角） | `@assumption-xray <想法>`     | A/B/C/D 拆解 + 裸奔排序 + 最致命追问 + 每条 Fails if / 最便宜验证 / kill 标准 |
-| **user-insight**               | `@user-insight <访谈/反馈>`     | 2–4 个洞察主题 + 可证伪 A 类假设                                     |
-| **competitor-teardown**        | `@competitor-teardown <竞品>` | 竞品矩阵（含「现状凑合方案」）+ 市场缺口 → B/C 类假设                           |
-| **evidence-intake**            | `@evidence-intake <证据>`     | 归档 sources/ + 升降级台账 + 触发反驳循环                              |
-| **experiment-design**          | `@experiment-design`        | 把最便宜验证落成可追踪实验规格，`status → testing`                        |
-| **revise-thesis**              | `@revise-thesis`            | 结构化修订论点，追加 `thesis.revisions[]`，闭合循环                      |
+| Skill | 触发 | 主要产出 |
+| --- | --- | --- |
+| **assumption-xray**（昵称：照妖镜，主角） | `@assumption-xray <想法>` | A/B/C/D 拆解 + 裸奔排序 + 最致命追问 + 每条 Fails if / 最便宜验证 / kill 标准 |
+| **user-insight** | `@user-insight <访谈/反馈>` | 2–4 个洞察主题 + 可证伪 A 类假设 |
+| **competitor-teardown** | `@competitor-teardown <竞品>` | 竞品矩阵（含「现状凑合方案」）+ 市场缺口 → B/C 类假设 |
+| **evidence-intake** | `@evidence-intake <证据>` | 归档 sources/ + 升降级台账 + 触发反驳循环 |
+| **experiment-design** | `@experiment-design` | 把最便宜验证落成可追踪实验规格，`status → testing` |
+| **revise-thesis** | `@revise-thesis` | 结构化修订论点，追加 `thesis.revisions[]`，闭合循环 |
 
 ### Commands
 
-| 命令        | 作用                                                 |
-| --------- | -------------------------------------------------- |
-| `/new`    | 一键初始化项目（slug 化命名 + 重名保护）                           |
-| `/list`   | 列出所有项目 + 各自裸奔假设数 / 待 sign-off 数                    |
-| `/review` | 批量 sign-off（扫描 ≥L3 或状态终局且未签字项）                     |
+| 命令 | 作用 |
+| --- | --- |
+| `/new` | 一键初始化项目（slug 化命名 + 重名保护） |
+| `/list` | 列出所有项目 + 各自裸奔假设数 / 待 sign-off 数 |
+| `/review` | 批量 sign-off（扫描 ≥L3 或状态终局且未签字项） |
 | `/decide` | go / pivot / kill 决策日志（写 `decisions.md`，不入 schema） |
-| `/retro`  | 复盘决策校准（取 git-SHA 快照对照当时假设分布 vs 现在结果）               |
-| `/lookup` | 跨项目查历史教训（扫全 workspace 按关键词/type/status 检索）         |
+| `/retro` | 复盘决策校准（取 git-SHA 快照对照当时假设分布 vs 现在结果） |
+| `/lookup` | 跨项目查历史教训（扫全 workspace 按关键词/type/status 检索） |
 
 **不是 prompt 拼装**：每个 skill 配 5 条 eval，内核数据过 `validate.mjs` 硬校验（可靠度越级直接 exit 1）。LLM 只负责判断，纪律交给确定性脚本。
 
 ---
 
 <details open>
-<summary>想深入？核心概念 · 数据契约 · 设计哲学</summary>
+<summary><strong>想深入？核心概念 · 数据契约 · 设计哲学</strong></summary>
 
 ## 核心概念
 
@@ -158,30 +161,30 @@ node tools/validate.mjs workspace/<项目名>/ledger.json
 
 ### 两个内核对象
 
-| 对象                    | 角色  | 说明                                          |
-| --------------------- | --- | ------------------------------------------- |
-| **thesis**            | 北极星 | 必须可被证伪的陈述：目标用户 / 核心问题 / 解法假设 / 为什么现在 / 成功信号 |
-| **assumption-ledger** | 心脏  | 把论点拆解为可验证假设，分类管理、分级留存——决策内核最核心的对象           |
+| 对象 | 角色 | 说明 |
+| --- | --- | --- |
+| **thesis** | 北极星 | 必须可被证伪的陈述：目标用户 / 核心问题 / 解法假设 / 为什么现在 / 成功信号 |
+| **assumption-ledger** | 心脏 | 把论点拆解为可验证假设，分类管理、分级留存——决策内核最核心的对象 |
 
 ### 四类假设 · A / B / C / D
 
-| 类型    | 含义   | 回答的问题                |
-| ----- | ---- | -------------------- |
+| 类型 | 含义 | 回答的问题 |
+| --- | --- | --- |
 | **A** | 用户价值 | 用户真的有这个痛点、愿意为此改变行为吗？ |
-| **B** | 商业可行 | 这个模式能赚钱、单位经济成立吗？     |
-| **C** | 技术可行 | 我们能做出来、性能/成本/集成可行吗？  |
-| **D** | 安全合规 | 能上线吗？会触犯监管吗？数据合规吗？   |
+| **B** | 商业可行 | 这个模式能赚钱、单位经济成立吗？ |
+| **C** | 技术可行 | 我们能做出来、性能/成本/集成可行吗？ |
+| **D** | 安全合规 | 能上线吗？会触犯监管吗？数据合规吗？ |
 
 ### 证据分级 · L1 → L4
 
 可靠度上限硬约束：`evidenceLevel` 不得高于来源 `reliability` 的上限。违反由 `validate.mjs` 判校验失败（exit 1）。
 
-| 等级     | 含义   | 来源上限       |
-| ------ | ---- | ---------- |
-| **L1** | 只是觉得 | `self`     |
+| 等级 | 含义 | 来源上限 |
+| --- | --- | --- |
+| **L1** | 只是觉得 | `self` |
 | **L2** | 间接信号 | `indirect` |
-| **L3** | 直接证据 | `direct`   |
-| **L4** | 数据验证 | `data`     |
+| **L3** | 直接证据 | `direct` |
+| **L4** | 数据验证 | `data` |
 
 ### 其他关键机制
 
@@ -240,10 +243,10 @@ reckoner/
 
 ## 在 Agent 工具里怎么用
 
-| 工具                       | 发现方式                                                           |
-| ------------------------ | -------------------------------------------------------------- |
-| **Claude Code / Cowork** | `skills/` 与斜杠命令原生自动发现，直接 `@assumption-xray` / `/new`           |
-| **Codex**                | 先读根目录 `AGENTS.md` 建立上下文；skill 通过读对应 `SKILL.md` 执行，脚本通过 shell 跑 |
+| 工具 | 发现方式 |
+| --- | --- |
+| **Claude Code / Cowork** | `skills/` 与斜杠命令原生自动发现，直接 `@assumption-xray` / `/new` |
+| **Codex** | 先读根目录 `AGENTS.md` 建立上下文；skill 通过读对应 `SKILL.md` 执行，脚本通过 shell 跑 |
 
 > 命令行是**确定性脊椎**（护栏），agent 是**友好门面**——你只碰门面。
 
@@ -269,11 +272,11 @@ reckoner/
 
 ## 路线图
 
-| 阶段            | 内容                                                                                                                                            |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| **P0**（本仓库）   | thesis + ledger 两对象 + 6 skill + 6 命令 + validator + 项目初始化 + agent 约定。回路闭合：照妖镜 → 实验设计 → 证据采集 → review → decide → 论点修订；/retro 复盘校准；/lookup 跨项目检索 |
-| **Phase 1.5** | OST（机会方案树）；`/retro` + `/lookup` 已下移至 P0                                                                                                       |
-| **Phase 2**   | Web 体检仪表盘（内核数据稳定、需要可视化留存时）                                                                                                                    |
+| 阶段 | 内容 |
+| --- | --- |
+| **P0**（本仓库） | thesis + ledger 两对象 + 6 skill + 6 命令 + validator + 项目初始化 + agent 约定。回路闭合：照妖镜 → 实验设计 → 证据采集 → review → decide → 论点修订；/retro 复盘校准；/lookup 跨项目检索 |
+| **Phase 1.5** | OST（机会方案树）；`/retro` + `/lookup` 已下移至 P0 |
+| **Phase 2** | Web 体检仪表盘（内核数据稳定、需要可视化留存时） |
 
 ## 校验与质量
 
